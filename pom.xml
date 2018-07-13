@@ -93,7 +93,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.Main</mainClass>
+                            <mainClass>za.co.wethinkcode.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

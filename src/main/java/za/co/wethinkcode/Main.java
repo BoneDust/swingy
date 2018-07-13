@@ -1,9 +1,8 @@
-package com;
+package za.co.wethinkcode;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
@@ -20,7 +19,7 @@ public class Main
 
     public static void main (String[] args) throws Exception
     {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+       /* ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
         test testing = new test(500);
         Set<ConstraintViolation<test>> constraintViolations = validator.validate(testing);
@@ -29,7 +28,7 @@ public class Main
             System.out.println("\n\n<<< Failed validations >>>\n");
             for (ConstraintViolation<test> constraints : constraintViolations)
                 System.out.println("Error " + constraints.getMessage());
-        }
+        }*/
         Connection conn;
         Statement statement;
         Class.forName("com.mysql.cj.jdbc.Driver");
