@@ -14,16 +14,16 @@ public class Map
     @Min(value = 0, message = "A map's dimensions must be greater than 0.")
     private int size;
 
-
-    @NotNull
+    @ValidGrid//todo need to create this annotation
     private int[][] grid;
 
     public Map(int size)
     {
         this.setSize(size);
+        initGrid();
     }
 
-    public void initGrid()
+    private void initGrid()
     {
         grid = new int[this.getSize()][this.getSize()];
     }
