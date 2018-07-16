@@ -1,10 +1,12 @@
 //https://stackoverflow.com/questions/6294587/java-string-validation-using-enum-values-and-annotation/6360458
 
-package za.co.wethinkcode.utils;
+package za.co.wethinkcode.annotations;
 
+import javax.validation.Constraint;
 import javax.validation.Payload;
 
-public @interface ValidateString
+@Constraint(validatedBy = {TypeValidator.class})
+public @interface ValidateType
 {
     String[] types();
 

@@ -2,23 +2,20 @@ package za.co.wethinkcode.models.playables;
 
 import lombok.Getter;
 import lombok.Setter;
-import za.co.wethinkcode.utils.ValidateString;
-import za.co.wethinkcode.models.map.Coordinates;
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import za.co.wethinkcode.models.map.Coordinates;
 
 @Setter
 @Getter
+//http://www.summa.com/blog/2013/05/30/creating-custom-validation-constraints
 public class Character
 {
     @NotNull
     @Size(min = 4, max = 15, message = "The length of a character's name must be between 4 and 15.")
     protected String name;
-
-    @NotNull
-    @ValidateString(types = {"Villain", "KungFuMaster", "Swordsman", "Gunman"})
-    protected String type;
 
     @NotNull
     @Min(value = 0, message = "Character level cannot be lower than 0.")
@@ -41,5 +38,17 @@ public class Character
     protected int hp;
 
     @NotNull
+    @Valid
     protected Coordinates coordinates;
+
+    public Character(String name, int level, int exp, int atk, int def, int hp, Coordinates coordinates)
+    {
+        this.setName(name);
+        this.setLevel(level);
+        this.setExp(exp);
+        this.setAtk(atk);
+        this.setDef(def);
+        this.setHp(hp);
+        this.setCoordinates(coordinates);
+    }
 }

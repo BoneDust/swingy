@@ -17,6 +17,7 @@
     <dependencies>
 
         <!--  https://stackoverflow.com/questions/4687609/maven-not-setting-classpath-for-dependencies-properly -->
+        <!--  https://dzone.com/articles/create-your-own-constraint-with-bean-validation-20  -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>

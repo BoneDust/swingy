@@ -3,6 +3,8 @@ package za.co.wethinkcode.models.playables;
 
 import lombok.Getter;
 import lombok.Setter;
+import za.co.wethinkcode.annotations.ValidateType;
+import za.co.wethinkcode.models.map.Coordinates;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -16,15 +18,15 @@ public class Villain extends Character implements Playable
     @Size(min = 5, max = 50, message = "A vallain's catchphrase must be  5-50 characters long.")
     private String catchPhrase;
 
-    public Villain(String name, String type, int level, int exp, int atk, int def, int hp, String catchPhrase)
+    @NotNull
+    @ValidateType(types = {"Villain"})
+    private String type;
+
+
+    public Villain(String name, String type, int level, int exp, int atk, int def, int hp, Coordinates pos, String phrase)
     {
-        this.setName(name);
+        super(name, level, exp, atk, def, hp, pos);
         this.setType(type);
-        this.setLevel(level);
-        this.setExp(exp);
-        this.setAtk(atk);
-        this.setDef(def);
-        this.setHp(hp);
         this.setCatchPhrase(catchPhrase);
     }
 

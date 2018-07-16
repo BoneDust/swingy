@@ -2,7 +2,9 @@ package za.co.wethinkcode.models.map;
 
 import lombok.Getter;
 import lombok.Setter;
+import za.co.wethinkcode.annotations.ValidateMapGrid;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -12,9 +14,10 @@ public class Map
 {
     @NotNull
     @Min(value = 0, message = "A map's dimensions must be greater than 0.")
+    @Max(value = 2147483647, message = "A map's dimensions cannot exceed MAX_INT value.")
     private int size;
 
-    @ValidGrid//todo need to create this annotation
+    @ValidateMapGrid
     private int[][] grid;
 
     public Map(int size)

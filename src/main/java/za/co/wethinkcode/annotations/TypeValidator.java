@@ -1,16 +1,16 @@
-package za.co.wethinkcode.utils;
+package za.co.wethinkcode.annotations;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.ArrayList;
 
-public class StringValidator implements ConstraintValidator<ValidateString, String>
+public class TypeValidator implements ConstraintValidator<ValidateType, String>
 {
 
     private ArrayList<String> values;
 
     @Override
-    public void initialize(ValidateString constraintAnnotation)
+    public void initialize(ValidateType constraintAnnotation)
     {
         values = new ArrayList<>();
         for(String value : constraintAnnotation.types())
