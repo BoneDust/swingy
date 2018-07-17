@@ -2,7 +2,6 @@ package za.co.wethinkcode.models.map;
 
 import lombok.Getter;
 import lombok.Setter;
-import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -18,12 +17,12 @@ public class Coordinates
 
     @NotNull
     @Min(value = 0, message = "x-coordinate cannot be less than zero.")
-    @Max(value = bounds - 1, message = "x-coordinate cannot be greater than  " + bounds - 1 +".")
+    @Max(value = 2147483646, message = "x-coordinate cannot be greater than MAX_INT value.")
     private int x;
 
     @NotNull
     @Min(value = 0, message = "y-coordinate cannot be less than zero.")
-    @Max(value = map.getSize() - 1, message = "y-coordinate cannot be greater than  " + map.getSize() +".")
+    @Max(value = 2147483646, message = "y-coordinate cannot be greater than MAX_INT value.")
     private int y;
 
     public Coordinates(int x, int y, int size)
@@ -31,5 +30,13 @@ public class Coordinates
         this.bounds = size;
         this.setX(x);
         this.setY(y);
+    }
+
+    public boolean isInBoundaries()
+    {
+        if (x < bounds && y < bounds)
+            return (true);
+        else
+            return (false);
     }
 }
