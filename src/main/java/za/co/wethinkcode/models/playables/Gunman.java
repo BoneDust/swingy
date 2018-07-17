@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 
 @Setter
 @Getter
-public class Gunman extends Character implements Playable
+public class Gunman extends Player implements Playable
 {
     @NotNull
     @ValidateType(types = {"Gunman"})
