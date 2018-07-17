@@ -6,13 +6,22 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import za.co.wethinkcode.models.artefacts.Artefact;
 import za.co.wethinkcode.models.map.Coordinates;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 @Getter
 //http://www.summa.com/blog/2013/05/30/creating-custom-validation-constraints
 public class Character
 {
+    @NotNull
+    @Valid
+    protected List<Artefact> artefacts;
+
     @NotNull
     @Size(min = 4, max = 15, message = "The length of a character's name must be between 4 and 15.")
     protected String name;
@@ -50,5 +59,6 @@ public class Character
         this.setDef(def);
         this.setHp(hp);
         this.setCoordinates(coordinates);
+        this.artefacts = new ArrayList<>();
     }
 }

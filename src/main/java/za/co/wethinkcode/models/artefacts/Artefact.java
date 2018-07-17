@@ -1,7 +1,6 @@
 package za.co.wethinkcode.models.artefacts;
 
 import lombok.Getter;
-import lombok.Setter;
 import za.co.wethinkcode.annotations.ValidateType;
 
 import javax.validation.constraints.Max;
@@ -16,20 +15,20 @@ public class Artefact
     @Max(value = 2147483647)
     @Min(value = 0)
     protected int value;
-
-    @Setter
+    
     @NotNull
     @Size(min = 5, max = 15)
     protected String name;
 
-    @Setter
     @NotNull
     @ValidateType(types = {"Weapon", "Armor", "Helm"})
     protected String type;
 
     public Artefact(String name, String type, int value)
     {
-
+        this.name = name;
+        this.type = type;
+        this.value = value;
     }
 
 }

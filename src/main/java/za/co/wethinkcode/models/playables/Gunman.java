@@ -26,13 +26,16 @@ public class Gunman extends Character implements Playable
         this.setType("Gunman");
     }
 
-    public void Attack(Playable playable)
+    public String Attack(Playable playable)
     {
-
+        Villain villain = (Villain)playable;
+        return (this.getName() + "shot villain " + villain.getName() + " with " + this.getAtk() + "damage points.");
     }
 
-    public void Defend(Playable playable)
+    public String Defend(Playable playable)
     {
-
+        Villain villain = (Villain)playable;
+        return (this.getName() + "blocked an attack from villain " + villain.getName() + ", blocking  "
+                + this.getDef() + "damage points.");
     }
 }

@@ -26,13 +26,17 @@ public class KungFuMaster extends Character implements Playable
         this.setType("KungFuMaster");
     }
 
-    public void Attack(Playable playable)
+    public String Attack(Playable playable)
     {
-
+        Villain villain = (Villain)playable;
+        return ("Shifu "+ this.getName() + "palmed villain " + villain.getName() + " with " + this.getAtk()
+                + "damage points.");
     }
 
-    public void Defend(Playable playable)
+    public String Defend(Playable playable)
     {
-
+        Villain villain = (Villain)playable;
+        return ("Shifu "+ this.getName() + "guarded an attack from villain " + villain.getName() + ", blocking  "
+                + this.getDef() + "damage points.");
     }
 }

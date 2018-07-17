@@ -26,13 +26,16 @@ public class Swordsman extends Character implements Playable
         this.setType("Swordsman");
     }
 
-    public void Attack(Playable playable)
+    public String Attack(Playable playable)
     {
-
+        Villain villain = (Villain)playable;
+        return (this.getName() + "sliced villain " + villain.getName() + " with " + this.getAtk() + "damage points.");
     }
 
-    public void Defend(Playable playable)
+    public String Defend(Playable playable)
     {
-
+        Villain villain = (Villain)playable;
+        return (this.getName() + "parried an attack from villain " + villain.getName() + ", blocking  "
+                + this.getDef() + "damage points.");
     }
 }

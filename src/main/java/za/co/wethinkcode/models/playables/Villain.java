@@ -6,13 +6,14 @@ import lombok.Setter;
 import za.co.wethinkcode.annotations.ValidateType;
 import za.co.wethinkcode.models.map.Coordinates;
 
+import javax.swing.text.AttributeSet;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 
 @Setter
 @Getter
-public class Villain extends Character implements Playable
+public class Villain extends Character
 {
     @NotNull
     @Size(min = 5, max = 50, message = "A vallain's catchphrase must be  5-50 characters long.")
@@ -27,16 +28,16 @@ public class Villain extends Character implements Playable
     {
         super(name, level, exp, atk, def, hp, pos);
         this.setType(type);
-        this.setCatchPhrase(catchPhrase);
+        this.setCatchPhrase(phrase);
     }
 
-    public void Attack(Playable playable)
+    public String Attack()
     {
-
+        return ("Take a hit worth "+ this.getAtk()+" damage points from the mighty " + this.getName());
     }
 
-    public void Defend(Playable playable)
+    public String Defend()
     {
-
+        return ("The great "+ this.getName()+" just defended an attack with " + this.getDef() + " defence points.");
     }
 }
