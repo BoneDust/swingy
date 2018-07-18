@@ -1,4 +1,4 @@
-package za.co.wethinkcode.models.map;
+package za.co.wethinkcode.swingy.models.map;
 
 import lombok.Getter;
 import lombok.Setter;

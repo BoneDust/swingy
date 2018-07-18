@@ -1,4 +1,4 @@
-package za.co.wethinkcode.annotations;
+package za.co.wethinkcode.swingy.annotations;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

@@ -1,8 +1,8 @@
-package za.co.wethinkcode.models.map;
+package za.co.wethinkcode.swingy.models.map;
 
 import lombok.Getter;
 import lombok.Setter;
-import za.co.wethinkcode.annotations.ValidateMapGrid;
+import za.co.wethinkcode.swingy.annotations.ValidateMapGrid;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;

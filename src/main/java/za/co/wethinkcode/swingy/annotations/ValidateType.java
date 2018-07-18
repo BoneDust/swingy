@@ -1,6 +1,6 @@
 //https://stackoverflow.com/questions/6294587/java-string-validation-using-enum-values-and-annotation/6360458
 
-package za.co.wethinkcode.annotations;
+package za.co.wethinkcode.swingy.annotations;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

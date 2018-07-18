@@ -94,7 +94,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>za.co.wethinkcode.Main</mainClass>
+                            <mainClass>za.co.wethinkcode.swingy.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

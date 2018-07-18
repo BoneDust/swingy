@@ -1,11 +1,10 @@
-package za.co.wethinkcode.models.playables;
+package za.co.wethinkcode.swingy.models.playables;
 
 
 import lombok.Getter;
 import lombok.Setter;
-import za.co.wethinkcode.annotations.ValidateType;
-import za.co.wethinkcode.models.map.Coordinates;
-
+import za.co.wethinkcode.swingy.annotations.ValidateType;
+import za.co.wethinkcode.swingy.models.map.Coordinates;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -15,7 +14,7 @@ import javax.validation.constraints.Size;
 public class Villain extends Player
 {
     @NotNull
-    @Size(min = 5, max = 50, message = "A vallain's catchphrase must be  5-50 characters long.")
+    @Size(min = 5, max = 50, message = "A villain's catchphrase must be  5-50 characters long.")
     private String catchPhrase;
 
     @NotNull

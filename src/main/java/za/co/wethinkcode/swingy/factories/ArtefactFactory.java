@@ -1,6 +1,6 @@
-package za.co.wethinkcode.models.factories;
+package za.co.wethinkcode.swingy.factories;
 
-import za.co.wethinkcode.models.artefacts.Artefact;
+import za.co.wethinkcode.swingy.models.artefacts.Artefact;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;

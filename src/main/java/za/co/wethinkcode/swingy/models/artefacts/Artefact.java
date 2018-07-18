@@ -1,8 +1,7 @@
-package za.co.wethinkcode.models.artefacts;
+package za.co.wethinkcode.swingy.models.artefacts;
 
 import lombok.Getter;
-import za.co.wethinkcode.annotations.ValidateType;
-
+import za.co.wethinkcode.swingy.annotations.ValidateType;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;

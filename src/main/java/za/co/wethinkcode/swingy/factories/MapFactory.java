@@ -1,6 +1,6 @@
-package za.co.wethinkcode.models.factories;
+package za.co.wethinkcode.swingy.factories;
 
-import za.co.wethinkcode.models.map.Map;
+import za.co.wethinkcode.swingy.models.map.Map;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;

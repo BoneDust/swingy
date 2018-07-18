@@ -1,4 +1,4 @@
-package za.co.wethinkcode;
+package za.co.wethinkcode.swingy;
 
 import lombok.Getter;
 import lombok.Setter;

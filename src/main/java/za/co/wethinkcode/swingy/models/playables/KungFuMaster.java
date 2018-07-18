@@ -1,9 +1,9 @@
-package za.co.wethinkcode.models.playables;
+package za.co.wethinkcode.swingy.models.playables;
 
 import lombok.Getter;
 import lombok.Setter;
-import za.co.wethinkcode.annotations.ValidateType;
-import za.co.wethinkcode.models.map.Coordinates;
+import za.co.wethinkcode.swingy.annotations.ValidateType;
+import za.co.wethinkcode.swingy.models.map.Coordinates;
 import javax.validation.constraints.NotNull;
 
 @Getter

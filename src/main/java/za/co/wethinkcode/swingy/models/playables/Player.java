@@ -1,4 +1,4 @@
-package za.co.wethinkcode.models.playables;
+package za.co.wethinkcode.swingy.models.playables;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,10 +6,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import za.co.wethinkcode.models.artefacts.Artefact;
-import za.co.wethinkcode.models.map.Coordinates;
-
+import za.co.wethinkcode.swingy.models.artefacts.Artefact;
+import za.co.wethinkcode.swingy.models.map.Coordinates;
 import java.util.ArrayList;
 import java.util.List;
 

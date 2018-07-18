@@ -1,4 +1,4 @@
-package za.co.wethinkcode.models.playables;
+package za.co.wethinkcode.swingy.models.playables;
 
 public interface Playable
 {
