@@ -14,15 +14,16 @@ public class Swordsman extends Player implements Playable
     @ValidateType(types = {"Swordsman"})
     private String type;
 
-    public Swordsman(String name, String type, int level, int exp, int atk, int def, int hp, Coordinates coordinates)
+    public Swordsman(int id,String name, String type, int level, int exp, int atk, int def, int hp,
+                     Coordinates coordinates)
     {
-        super(name, level, exp, atk, def, hp, coordinates);
+        super(id, name, level, exp, atk, def, hp, coordinates);
         this.setType(type);
     }
 
-    public Swordsman(String name, Coordinates coordinates)
+    public Swordsman(int id, String name, Coordinates coordinates)
     {
-        super(name, 1, 0, 60, 25, 200, coordinates);
+        super(id, name, 1, 0, 60, 25, 200, coordinates);
         this.setType("Swordsman");
     }
 

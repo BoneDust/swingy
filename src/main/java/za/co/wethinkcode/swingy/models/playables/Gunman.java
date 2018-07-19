@@ -14,15 +14,16 @@ public class Gunman extends Player implements Playable
     @ValidateType(types = {"Gunman"})
     private String type;
 
-    public Gunman(String name, String type, int level, int exp, int atk, int def, int hp, Coordinates coordinates)
+    public Gunman(int id, String name, String type, int level, int exp, int atk, int def, int hp,
+                  Coordinates coordinates)
     {
-        super(name, level, exp, atk, def, hp, coordinates);
+        super(id, name, level, exp, atk, def, hp, coordinates);
         this.setType(type);
     }
 
-    public Gunman(String name, Coordinates coordinates)
+    public Gunman(int id, String name, Coordinates coordinates)
     {
-        super(name, 1, 0, 80, 15, 350, coordinates);
+        super(id, name, 1, 0, 80, 15, 350, coordinates);
         this.setType("Gunman");
     }
 

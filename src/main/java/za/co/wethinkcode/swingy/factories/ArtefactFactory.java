@@ -10,9 +10,11 @@ import java.util.Set;
 
 public class ArtefactFactory
 {
+    private static int id = 0;
     public static Artefact newArtefact(int value, String name, String type)
     {
-        Artefact artefact = new Artefact(name,type,value);
+        id++;
+        Artefact artefact = new Artefact(name,type,value, id);
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
         Set<ConstraintViolation<Artefact>> constraintViolations = validator.validate(artefact);

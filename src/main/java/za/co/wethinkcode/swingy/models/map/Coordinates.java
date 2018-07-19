@@ -31,12 +31,4 @@ public class Coordinates
         this.setX(x);
         this.setY(y);
     }
-
-    public boolean isInBoundaries()
-    {
-        if (x < bounds && y < bounds)
-            return (true);
-        else
-            return (false);
-    }
 }

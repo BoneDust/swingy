@@ -11,6 +11,7 @@ import java.util.Set;
 public class PlayerFactory
 {
 
+    private static int id = 0;
     private static Player validatePlayer(Player player)
     {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
@@ -27,35 +28,44 @@ public class PlayerFactory
         return (player);
     }
 
-    public static Player oldPlayer(String name, String type, int lvl, int exp, int atk, int def, int hp,
+    public static Player oldPlayer(int id, String name, String type, int lvl, int exp, int atk, int def, int hp,
                                    Coordinates coordinates)
     {
         Player player;
 
         if (type.equals("Gunman"))
-            player = new Gunman(name, type, lvl, exp, atk, def, hp, coordinates);
+            player = new Gunman(id, name, type, lvl, exp, atk, def, hp, coordinates);
         else if (type.equals("KungFuMaster"))
-            player = new KungFuMaster(name, type, lvl, exp, atk, def, hp, coordinates);
+            player = new KungFuMaster(id, name, type, lvl, exp, atk, def, hp, coordinates);
         else if (type.equals("Swordsman"))
-            player = new Swordsman(name, type, lvl, exp, atk, def, hp, coordinates);
+            player = new Swordsman(id, name, type, lvl, exp, atk, def, hp, coordinates);
         else if (type.equals("Villain"))
-            player = VillainFactory.oldVillain(name, type, lvl, exp, atk, def, hp, coordinates);
+            player = VillainFactory.oldVillain(id, name, type, lvl, exp, atk, def, hp, coordinates);
         else
             player = null;
         return (validatePlayer(player));
-
     }
 
     public static Player newPlayer(String name, String type, Coordinates coordinates)
     {
-        Player player;
 
+        Player player;
         if (type.equals("Gunman"))
-            player = new Gunman(name, coordinates);
+        {
+            id++;
+            player = new Gunman(id, name, coordinates);
+        }
         else if (type.equals("KungFuMaster"))
-            player = new KungFuMaster(name, coordinates);
+        {
+            id++;
+            player = new KungFuMaster(id, name, coordinates);
+
+        }
         else if (type.equals("Swordsman"))
-            player = new Swordsman(name, coordinates);
+        {
+            id++;
+            player = new Swordsman(id, name, coordinates);
+        }
         else if (type.equals("Villain"))
             player = VillainFactory.newVillain(name, type, coordinates);
         else

@@ -14,15 +14,16 @@ public class KungFuMaster extends Player implements Playable
     @ValidateType(types = {"KungFuMaster"})
     private String type;
 
-    public KungFuMaster(String name, String type, int level, int exp, int atk, int def, int hp, Coordinates coordinates)
+    public KungFuMaster(int id, String name, String type, int level, int exp, int atk, int def, int hp,
+                        Coordinates coordinates)
     {
-        super(name, level, exp, atk, def, hp, coordinates);
+        super(id, name, level, exp, atk, def, hp, coordinates);
         this.setType(type);
     }
 
-    public KungFuMaster(String name, Coordinates coordinates)
+    public KungFuMaster(int id, String name, Coordinates coordinates)
     {
-        super(name, 1, 0, 40, 25, 300, coordinates);
+        super(id, name, 1, 0, 40, 25, 300, coordinates);
         this.setType("KungFuMaster");
     }
 

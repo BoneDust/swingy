@@ -22,9 +22,9 @@ public class Villain extends Player
     private String type;
 
 
-    public Villain(String name, String type, int level, int exp, int atk, int def, int hp, Coordinates pos)
+    public Villain(int id, String name, String type, int level, int exp, int atk, int def, int hp, Coordinates pos)
     {
-        super(name, level, exp, atk, def, hp, pos);
+        super(id, name, level, exp, atk, def, hp, pos);
         this.setType(type);
     }
 

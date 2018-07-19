@@ -19,24 +19,6 @@ public class Main
 
     public static void main (String[] args) throws Exception
     {
-       /* ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-        test testing = new test(500);
-        Set<ConstraintViolation<test>> constraintViolations = validator.validate(testing);
-        if (constraintViolations.size() > 0 )
-        {
-            System.out.println("\n\n<<< Failed validations >>>\n");
-            for (ConstraintViolation<test> constraints : constraintViolations)
-                System.out.println("Error " + constraints.getMessage());
-        }*/
-        Connection conn;
-        Statement statement;
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        conn = DriverManager.getConnection("jdbc:mysql://localhost:3308", "root", "password");
-        statement = conn.createStatement();
-        String createDB = "create database if not exists budas";
-        statement.executeUpdate(createDB);//statement.executeQuery();
-        statement.close();
-        conn.close();
+
     }
 }

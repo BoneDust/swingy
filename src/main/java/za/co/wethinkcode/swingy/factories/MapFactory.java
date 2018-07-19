@@ -9,13 +9,14 @@ import java.util.Set;
 
 public class MapFactory
 {
+    private static int id = 0;
     public static Map newMap(int level)
     {
+        id++;
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
-
         int size = ((level - 1) * 5) + 10 - (level % 2);
-        Map map = new Map(size);
+        Map map = new Map(size, id);
 
         Set<ConstraintViolation<Map>> constraintViolations = validator.validate(map);
         if (constraintViolations.size() > 0 )
