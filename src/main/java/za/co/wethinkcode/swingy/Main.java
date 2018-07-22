@@ -2,6 +2,7 @@ package za.co.wethinkcode.swingy;
 
 import lombok.Getter;
 import lombok.Setter;
+import za.co.wethinkcode.swingy.controllers.DBController;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -19,6 +20,7 @@ public class Main
 
     public static void main (String[] args) throws Exception
     {
-
+        DBController.createDB();
+        DBController.initDB();
     }
 }

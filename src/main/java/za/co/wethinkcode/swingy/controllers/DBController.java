@@ -36,17 +36,18 @@ public class DBController
     {
         Connection  connection = getConnection();
         Statement statement = connection.createStatement();
-        String createArtefactTable = "CREATE TABLE if not exists `swingy`.`artefact`(" +
+        String createArtefactTable =
+                "CREATE TABLE if not exists `swingy`.`artefacts`(" +
                 "`id` INT NOT NULL , " +
                 "`playerId` INT NOT NULL," +
                 "`name` TEXT NOT NULL , " +
                 "`type` TEXT NOT NULL , " +
                 "`value` INT NOT NULL , " +
-                "PRIMARY KEY (`id`))" +
-                "FOREIGN KEY (`playerId`) REFERENCES  REFERENCES swingy.player (`id`)  " +
-                "ENGINE = InnoDB;";
+                "PRIMARY KEY (`id`)," +
+                "FOREIGN KEY (`playerId`) REFERENCES swingy.heroes (`id`));";
 
-        String createPlayerTable = "CREATE TABLE if not exists `swingy`.`player` (" +
+        String createHeroTable =
+                "CREATE TABLE if not exists `swingy`.`heroes` (" +
                 "`id` INT NOT NULL , " +
                 "`name` TEXT NOT NULL , " +
                 "`type` TEXT NOT NULL , " +
@@ -57,34 +58,52 @@ public class DBController
                 "`hp` INT NOT NULL , " +
                 "`x_coord` INT NOT NULL , " +
                 "`y_coord` INT NOT NULL , " +
-                "`phrase` TEXT NULL , " +
-                "PRIMARY KEY (`id`)) " +
-                "FOREIGN KEY (`playerId`) REFERENCES  REFERENCES swingy.player (`id`)  " +
-                "ENGINE = InnoDB;";
+                "PRIMARY KEY (`id`));";
 
-        String createMapTable = "CREATE TABLE if not exists `swingy`.`map` (" +
+        String createVillainTable =
+                "CREATE TABLE if not exists `swingy`.`villains` (" +
+                "`id` INT NOT NULL , " +
+                "`playerId` INT NOT NULL , " +
+                "`name` TEXT NOT NULL , " +
+                "`type` TEXT NOT NULL , " +
+                "`level` INT NOT NULL , " +
+                "`exp` INT NOT NULL , " +
+                "`atk` INT NOT NULL , " +
+                "`def` INT NOT NULL , " +
+                "`hp` INT NOT NULL , " +
+                "`x_coord` INT NOT NULL , " +
+                "`y_coord` INT NOT NULL , " +
+                "`phrase` TEXT NOT NULL , "+
+                "PRIMARY KEY (`id`), " +
+                "FOREIGN KEY (`playerId`) REFERENCES swingy.heroes (`id`));";
+
+        String createMapTable =
+                "CREATE TABLE if not exists `swingy`.`maps` (" +
                 "`id` INT NOT NULL , " +
                 "`playerId` INT NOT NULL," +
                 "`size` INT NOT NULL , " +
-                "PRIMARY KEY (`id`))" +
-                " ENGINE = InnoDB;";
+                "PRIMARY KEY (`id`)," +
+                "FOREIGN KEY (`playerId`) REFERENCES swingy.heroes (`id`)) " +
+                "ENGINE = InnoDB;";
 
-        statement.executeUpdate(createPlayerTable);
+        statement.executeUpdate(createHeroTable );
+        statement.executeUpdate(createVillainTable );
         statement.executeUpdate(createArtefactTable);
         statement.executeUpdate(createMapTable);
         statement.close();
         connection.close();
     }
 
-    public static ArrayList<Villain> getVillains() throws Exception
+  /*  public static ArrayList<Villain> getVillains(int playerId) throws Exception
     {
-
-        return (null);
+        ArrayList<Villain> villains = new ArrayList<>();
+        return (villains);
     }
 
     public static Player getPlayer() throws Exception
     {
-        return (null);
+        Player player;
+        return (player);
     }
 
     public static ArrayList<Player> getPlayers() throws Exception
@@ -97,18 +116,29 @@ public class DBController
         return (null);
     }
 
-    public static void recordPlayer(Player player) throws Exception
+    public static void recordHero(Player player) throws Exception
     {
+        Connection  connection = getConnection();
+        Statement statement = connection.createStatement();
+        String createDB = "INSERT INTO `heroes` (`id`, `name`, `type`, `level`, `exp`, `atk`, `def`, `hp`, `x_coord`, `y_coord`) VALUES ('1', 'lerole', 'Swordsman', '50', '10000', '400', '205', '3000', '1', '3')";
+        statement.executeUpdate(createDB);//statement.executeQuery();
+        statement.close();
+        connection.close();
+
 
     }
 
+
+
     public static void recordVillains(ArrayList<Villain> villains) throws Exception
     {
+        String query
 
     }
 
     public static void recordArtefacts(ArrayList<Artefact> artefacts) throws Exception
     {
+    INSERT INTO `artefacts` (`id`, `playerId`, `name`, `type`, `value`) VALUES ('1', '1', 'budas', 'helm', '50')
 
-    }
+    }*/
 }
