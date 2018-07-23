@@ -13,6 +13,8 @@ public class MapFactory
     public static Map newMap(int level)
     {
         id++;
+        final String ANSI_RED = "\u001B[31m";
+        final String ANSI_RESET = "\u001B[0m"
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
         int size = ((level - 1) * 5) + 10 - (level % 2);
@@ -21,9 +23,10 @@ public class MapFactory
         Set<ConstraintViolation<Map>> constraintViolations = validator.validate(map);
         if (constraintViolations.size() > 0 )
         {
-            System.out.println("\n\n<<< Failed validations >>>\n");
+            System.out.println(ANSI_RED + "\n\n<<< Failed map validations >>>\n");
             for (ConstraintViolation<Map> constraints : constraintViolations)
                 System.out.println("Error " + constraints.getMessage());
+            System.out.println(ANSI_RESET);
             return (null);
         }
         return (map);

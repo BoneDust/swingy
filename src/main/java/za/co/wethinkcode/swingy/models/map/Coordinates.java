@@ -11,11 +11,6 @@ import javax.validation.constraints.NotNull;
 public class Coordinates
 {
     @NotNull
-    @Min(value = 0, message = "A map's dimensions must be greater than 0.")
-    @Max(value = 2147483647, message = "A map's dimensions cannot exceed MAX_INT value.")
-    private int bounds;
-
-    @NotNull
     @Min(value = 0, message = "x-coordinate cannot be less than zero.")
     @Max(value = 2147483646, message = "x-coordinate cannot be greater than MAX_INT value.")
     private int x;
@@ -25,9 +20,8 @@ public class Coordinates
     @Max(value = 2147483646, message = "y-coordinate cannot be greater than MAX_INT value.")
     private int y;
 
-    public Coordinates(int x, int y, int size)
+    public Coordinates(int x, int y)
     {
-        this.bounds = size;
         this.setX(x);
         this.setY(y);
     }

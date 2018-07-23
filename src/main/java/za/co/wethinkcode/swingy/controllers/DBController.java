@@ -1,14 +1,12 @@
 package za.co.wethinkcode.swingy.controllers;
 
 import za.co.wethinkcode.swingy.models.artefacts.Artefact;
-import za.co.wethinkcode.swingy.models.playables.Player;
-import za.co.wethinkcode.swingy.models.playables.Villain;
-
+import za.co.wethinkcode.swingy.models.map.Map;
+import za.co.wethinkcode.swingy.models.playables.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 import java.util.ArrayList;
-
 
 //http://www.benchresources.net/jdbc-getting-single-record-using-jdbc-preparedstatement-interface/
 public class DBController
@@ -83,8 +81,9 @@ public class DBController
                 "`playerId` INT NOT NULL," +
                 "`size` INT NOT NULL , " +
                 "PRIMARY KEY (`id`)," +
-                "FOREIGN KEY (`playerId`) REFERENCES swingy.heroes (`id`)) " +
-                "ENGINE = InnoDB;";
+                "FOREIGN KEY (`playerId`) REFERENCES swingy.heroes (`id`)) ;"
+                //"ENGINE = InnoDB;"
+                ;
 
         statement.executeUpdate(createHeroTable );
         statement.executeUpdate(createVillainTable );
@@ -94,7 +93,7 @@ public class DBController
         connection.close();
     }
 
-  /*  public static ArrayList<Villain> getVillains(int playerId) throws Exception
+    public static ArrayList<Villain> getVillains(int playerId) throws Exception
     {
         ArrayList<Villain> villains = new ArrayList<>();
         return (villains);
@@ -103,7 +102,7 @@ public class DBController
     public static Player getPlayer() throws Exception
     {
         Player player;
-        return (player);
+        return (null);
     }
 
     public static ArrayList<Player> getPlayers() throws Exception
@@ -116,29 +115,100 @@ public class DBController
         return (null);
     }
 
+    public static Map getMap(int id) throws Exception
+    {
+        return (null)
+    }
+
     public static void recordHero(Player player) throws Exception
     {
         Connection  connection = getConnection();
         Statement statement = connection.createStatement();
-        String createDB = "INSERT INTO `heroes` (`id`, `name`, `type`, `level`, `exp`, `atk`, `def`, `hp`, `x_coord`, `y_coord`) VALUES ('1', 'lerole', 'Swordsman', '50', '10000', '400', '205', '3000', '1', '3')";
-        statement.executeUpdate(createDB);//statement.executeQuery();
+        String type;
+        if (player instanceof Swordsman)
+            type = "Swordsman";
+        else if (player instanceof Gunman)
+            type = "Gunman";
+        else if (player instanceof KungFuMaster)
+            type = "KungFuMaster";
+        else
+            type = "";
+        String insertHero = String.format("INSERT INTO `swingy`.`heroes` (`id`, `name`, `type`, `level`, `exp`," +
+                            " `atk`, `def`, `hp`, `x_coord`, `y_coord`)" +
+                            " VALUES (%d, %s, %s, %d, %d, %d, %d, %d, %d, %d);",
+                            player.getId(),
+                            player.getName(),
+                            type,
+                            player.getLevel(),
+                            player.getExp(),
+                            player.getAtk(),
+                            player.getDef(),
+                            player.getHp(),
+                            player.getCoordinates().getX(),
+                            player.getCoordinates().getY());
+        statement.executeUpdate(insertHero);
         statement.close();
         connection.close();
-
-
     }
 
-
-
-    public static void recordVillains(ArrayList<Villain> villains) throws Exception
+    public static void recordVillains(ArrayList<Villain> villains, int playerId) throws Exception
     {
-        String query
-
+        Connection  connection = getConnection();
+        Statement statement = connection.createStatement();
+        for (Villain villain : villains)
+        {
+            String insertVillain = String.format("INSERT INTO `swingy`.`villains` (`id`, 'playerId`, `name`, `type`," +
+                            " `level`, `exp`, `atk`, `def`, `hp`, `x_coord`, `y_coord`, `phrase`)" +
+                            " VALUES (%d, %d, %s, %s, %d, %d, %d, %d, %d, %d, %d, %s);",
+                            villain.getId(),
+                            playerId,
+                            villain.getName(),
+                            villain.getType(),
+                            villain.getLevel(),
+                            villain.getExp(),
+                            villain.getAtk(),
+                            villain.getDef(),
+                            villain.getHp(),
+                            villain.getCoordinates().getX(),
+                            villain.getCoordinates().getY(),
+                            villain.getCatchPhrase());
+            statement.executeUpdate(insertVillain);
+        }
+        statement.close();
+        connection.close();
     }
 
-    public static void recordArtefacts(ArrayList<Artefact> artefacts) throws Exception
+    public static void recordArtefacts(ArrayList<Artefact> artefacts, int playerId) throws Exception
     {
-    INSERT INTO `artefacts` (`id`, `playerId`, `name`, `type`, `value`) VALUES ('1', '1', 'budas', 'helm', '50')
+        Connection  connection = getConnection();
+        Statement statement = connection.createStatement();
+        for (Artefact artefact : artefacts)
+        {
+            String insertArtefact = String.format("INSERT INTO `swingy`.`artefacts` (`id`, `playerId`, `name`, `type`," +
+                            " `value`)" +
+                            " VALUES (%d, %d, %s, %s, %d);",
+                            artefact.getId(),
+                            playerId,
+                            artefact.getName(),
+                            artefact.getType(),
+                            artefact.getValue());
+            statement.executeUpdate(insertArtefact);
+        }
+        statement.close();
+        connection.close();
+    }
 
-    }*/
+    public static void recordMap(Map map, int playerId) throws Exception
+    {
+        Connection  connection = getConnection();
+        Statement statement = connection.createStatement();
+        String insertMap = String.format("INSERT INTO `swingy`.`maps` (`id`, `playerId`, `size`)" +
+                            " VALUES (%d, %d, %d);",
+                            map.getId(),
+                            playerId,
+                             map.getSize());
+        statement.executeUpdate(insertMap);
+        statement.close();
+        connection.close();
+    }
 }

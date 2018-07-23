@@ -14,15 +14,18 @@ public class PlayerFactory
     private static int id = 0;
     private static Player validatePlayer(Player player)
     {
+        final String ANSI_RED = "\u001B[31m";
+        final String ANSI_RESET = "\u001B[0m"
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
 
         Set<ConstraintViolation<Player>> constraintViolations = validator.validate(player);
         if (constraintViolations.size() > 0 )
         {
-            System.out.println("\n\n<<< Failed validations >>>\n");
+            System.out.println(ANSI_RED + "\n\n<<< Failed player validations >>>\n");
             for (ConstraintViolation<Player> constraints : constraintViolations)
                 System.out.println("Error " + constraints.getMessage());
+            System.out.println(ANSI_RESET);
             return (null);
         }
         return (player);
