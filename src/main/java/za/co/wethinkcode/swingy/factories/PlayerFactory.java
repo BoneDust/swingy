@@ -15,7 +15,7 @@ public class PlayerFactory
     private static Player validatePlayer(Player player)
     {
         final String ANSI_RED = "\u001B[31m";
-        final String ANSI_RESET = "\u001B[0m"
+        final String ANSI_RESET = "\u001B[0m";
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
 
@@ -24,7 +24,7 @@ public class PlayerFactory
         {
             System.out.println(ANSI_RED + "\n\n<<< Failed player validations >>>\n");
             for (ConstraintViolation<Player> constraints : constraintViolations)
-                System.out.println("Error " + constraints.getMessage());
+                System.out.println("Error :" + constraints.getMessage());
             System.out.println(ANSI_RESET);
             return (null);
         }
@@ -70,7 +70,10 @@ public class PlayerFactory
             player = new Swordsman(id, name, coordinates);
         }
         else if (type.equals("Villain"))
-            player = VillainFactory.newVillain(name, type, coordinates);
+        {
+            id++;
+            player = VillainFactory.newVillain(id, name, type, coordinates);
+        }
         else
             player = null;
         return (validatePlayer(player));
