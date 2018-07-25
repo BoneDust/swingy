@@ -1,8 +1,8 @@
 package za.co.wethinkcode.swingy.controllers;
 
-import za.co.wethinkcode.swingy.factories.ArtefactFactory;
-import za.co.wethinkcode.swingy.factories.MapFactory;
+import za.co.wethinkcode.swingy.factories.*;
 import za.co.wethinkcode.swingy.models.artefacts.Artefact;
+import za.co.wethinkcode.swingy.models.map.Coordinates;
 import za.co.wethinkcode.swingy.models.map.Map;
 import za.co.wethinkcode.swingy.models.playables.*;
 
@@ -140,38 +140,35 @@ public class DBController
         }
     }
 
-    public static ArrayList<Villain> getVillains(int playerId)
+    public static ArrayList<Villain> getVillains(int playerId, int playerLevel)
     {
         ArrayList<Villain> villains = new ArrayList<>();
-        return (villains);
-    }
-
-    public static Player getPlayer(int playerId)
-    {
-        Player player;
-        return (null);
-    }
-
-    public static ArrayList<Player> getPlayers()
-    {
-        int id, value;
+        int id, level, exp, atk, def, hp, x_coord, y_coord;
         String type, name;
         Connection connection = null;
         Statement statement = null;
-        ArrayList<Artefact> artefacts = new ArrayList<>();
         try
         {
             connection = getConnection();
             statement = connection.createStatement();
-            String selectArtefacts = String.format("select `id`, `name`, `type`, `value` from `swingy`.`artefacts` where `playerId` = %d", playerId);
-            ResultSet results = statement.executeQuery(selectArtefacts);
+            String selectPlayers = "select `id`, `name`, `type`, `level`, `exp`,`atk`, `def`, `hp`, `x_coord`," +
+                    " `y_coord` from `swingy`.`heroes`";
+            ResultSet results = statement.executeQuery(selectPlayers);
             while(results.next())
             {
                 id = results.getInt("id");
-                value = results.getInt("value");
                 name = results.getString("name");
                 type = results.getString("type");
-                artefacts.add(ArtefactFactory.oldArtefact(id, value, name, type));
+                level = results.getInt("level");
+                exp = results.getInt("exp");
+                atk = results.getInt("atk");
+                def = results.getInt("def");
+                hp = results.getInt("hp");
+                x_coord = results.getInt("x_coord");
+                y_coord = results.getInt("y_coord");
+                int size = ((playerLevel - 1) * 5) + 10 - (playerLevel % 2);
+                Coordinates coordinates = CoordinateFactory.newCoordinates(x_coord, y_coord, size);
+                villains.add(VillainFactory.oldVillain(id, name, type, level, exp, atk, def, hp, coordinates));
             }
         }
         catch (SQLException ex)
@@ -182,7 +179,91 @@ public class DBController
         {
             closeDBConnection(connection, statement);
         }
-        return (artefacts);
+        return (villains);
+    }
+
+    public static Player getPlayer(int playerId)
+    {
+        int id, level, exp, atk, def, hp, x_coord, y_coord;
+        String type, name;
+        Connection connection = null;
+        Statement statement = null;
+        Player player = null;
+        try
+        {
+            connection = getConnection();
+            statement = connection.createStatement();
+            String selectPlayer = String.format("select `id`, `name`, `type`, `level`, `exp`,`atk`, `def`, `hp`," +
+                                                " `x_coord`,`y_coord` from `swingy`.`heroes` where `id` = %d;", playerId);
+            ResultSet results = statement.executeQuery(selectPlayer);
+            while(results.next())
+            {
+                id = results.getInt("id");
+                name = results.getString("name");
+                type = results.getString("type");
+                level = results.getInt("level");
+                exp = results.getInt("exp");
+                atk = results.getInt("atk");
+                def = results.getInt("def");
+                hp = results.getInt("hp");
+                x_coord = results.getInt("x_coord");
+                y_coord = results.getInt("y_coord");
+                int size = ((level - 1) * 5) + 10 - (level % 2);
+                Coordinates coordinates = CoordinateFactory.newCoordinates(x_coord, y_coord, size);
+                player = PlayerFactory.oldPlayer(id, name, type, level, exp, atk, def, hp, coordinates);
+            }
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+        finally
+        {
+            closeDBConnection(connection, statement);
+        }
+        return (player);
+    }
+
+    public static ArrayList<Player> getPlayers()
+    {
+        int id, level, exp, atk, def, hp, x_coord, y_coord;
+        String type, name;
+        Connection connection = null;
+        Statement statement = null;
+        ArrayList<Player> players = new ArrayList<>();
+        try
+        {
+            connection = getConnection();
+            statement = connection.createStatement();
+            String selectPlayers = "select `id`, `name`, `type`, `level`, `exp`,`atk`, `def`, `hp`, `x_coord`," +
+                                    " `y_coord` from `swingy`.`heroes`";
+            ResultSet results = statement.executeQuery(selectPlayers);
+            while(results.next())
+            {
+                id = results.getInt("id");
+                name = results.getString("name");
+                type = results.getString("type");
+                level = results.getInt("level");
+                exp = results.getInt("exp");
+                atk = results.getInt("atk");
+                def = results.getInt("def");
+                hp = results.getInt("hp");
+                x_coord = results.getInt("x_coord");
+                y_coord = results.getInt("y_coord");
+                int size = ((level - 1) * 5) + 10 - (level % 2);
+                Coordinates coordinates = CoordinateFactory.newCoordinates(x_coord, y_coord, size);
+                players.add(PlayerFactory.oldPlayer(id, name, type, level, exp, atk, def, hp, coordinates));
+            }
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+        finally
+        {
+            closeDBConnection(connection, statement);
+        }
+        return (players);
     }
 
     public static ArrayList<Artefact> getArtefacts(int playerId)
