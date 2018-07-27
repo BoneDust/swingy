@@ -16,15 +16,6 @@ public class Main
     {
       //  DBController.createDB();
        // DBController.initDB();
-        JFrame frame = new JFrame("Swingy");
-        frame.setContentPane(new guiStartView().getWelcome());
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setPreferredSize(new Dimension(500, 300));
-        frame.setLayout(null);
-        frame.pack();
-        frame.setVisible(true);
-
+        guiStartView.displayStartView();
     }
 }
