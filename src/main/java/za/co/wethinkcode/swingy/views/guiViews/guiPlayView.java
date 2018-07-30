@@ -20,7 +20,7 @@ public class guiPlayView
     private static JTextArea reportText, statsText;
     private static JScrollPane reportScroll, statsScroll;
 
-    public static  void initPlayView()
+    private static  void initPlayView()
     {
         frame = new JFrame("Swingy");
         btnContinue = new JButton("save and continue");
@@ -43,33 +43,35 @@ public class guiPlayView
         statsScroll = new JScrollPane(statsText);
         reportScroll = new JScrollPane(reportText);
 
-        statsLabel.setBounds(120, 10, 100, 20);
-        statsLabel.setForeground(Color.WHITE);
-        statsScroll.setBounds(20, 40, 270, 460);
-        statsText.setBackground(Color.DARK_GRAY);
-        statsText.setForeground(Color.WHITE);
-        statsText.setText("Lerole\neeee\neeeeeee\neeeeeeeee\neeeeeeeee\neeeeee\neeeeee\neeeeeeee\neeeeeee\neeeeee\neeeeeeeee\neeeeeeee\neeeeeee\neeeeeeeee\neee\neeeeeeeeeeeeee\neeeeeeeeeeeeee\neeeeeeeeeeee\neeeeee\n\n\n\nkakr\n\n\n\n\n\n\n\n\nminathoko yaga budasdsfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\nfffffffffffffffffffffffffffff\nfffffffffffff\nffffff\n salvador");
         statsText.setEditable(false);
-        statsPanel.add(statsLabel);
-        statsPanel.add(statsScroll);
         statsPanel.setLayout(null);
-        statsPanel.setBackground(Color.DARK_GRAY);
+
+        reportText.setEditable(false);
+        reportPanel.setLayout(null);
+
+        movementPanel.setLayout(null);
+        mapPanel.setLayout(new GridLayout(5,5));
+        arenaPanel.setLayout(null);
+        setColors();
+        setBounds();
+        setListeners();
+        addToPanel();
+    }
+
+    private static void setListeners()
+    {
+        //todo
+    }
+
+    private static void setBounds()
+    {
+        statsLabel.setBounds(120, 10, 100, 20);
+        statsScroll.setBounds(20, 40, 270, 460);
         statsPanel.setPreferredSize( new Dimension( 295, 495 ) );
 
-        reportLabel.setBounds(120, 10, 100, 20);
-        reportLabel.setForeground(Color.white);
+        reportLabel.setBounds(120, 10, 100, 20);;
         reportScroll.setBounds(0, 40, 270, 460);
-        reportText.setEditable(false);
-        reportText.setBackground(Color.DARK_GRAY);
-        reportText.setForeground(Color.WHITE);
-        reportText.setText("Lerole\neeee\neeeeeee\neeeeeeeee\neeeeeeeee\neeeeee\neeeeee\neeeeeeee\neeeeeee\neeeeee\neeeeeeeee\neeeeeeee\neeeeeee\neeeeeeeee\neee\neeeeeeeeeeeeee\neeeeeeeeeeeeee\neeeeeeeeeeee\neeeeee\n\n\n\nkakr\n\n\n\n\n\n\n\n\nminathoko yaga budasdsfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\nfffffffffffffffffffffffffffff\nfffffffffffff\nffffff\n salvador");
-
-        reportPanel.add(reportLabel);
-        reportPanel.add(reportScroll);
-        reportPanel.setLayout(null);
         reportPanel.setPreferredSize( new Dimension( 295, 495 ) );
-        reportPanel.setBackground(Color.DARK_GRAY);
-
 
         btnNorth.setBounds(560, 20, 120, 20);
         btnSouth.setBounds(560, 100, 120, 20);
@@ -78,6 +80,35 @@ public class guiPlayView
         btnContinue.setBounds(380, 140, 160, 20);
         btnExit.setBounds(700, 140, 160, 20);
         btnSwitch.setBounds(540, 170, 160, 20);
+        movementPanel.setPreferredSize( new Dimension( 1200, 200));
+        arenaPanel.setPreferredSize( new Dimension( 600, 495 ) );
+        arenaLabel.setBounds(280, 10, 100, 20);
+        mapPanel.setBounds(0,40,600,455);
+    }
+
+    private static void setColors()
+    {
+        statsLabel.setForeground(Color.WHITE);
+        statsText.setBackground(Color.DARK_GRAY);
+        statsText.setForeground(Color.WHITE);
+        statsPanel.setBackground(Color.DARK_GRAY);
+        reportLabel.setForeground(Color.WHITE);
+        reportText.setBackground(Color.DARK_GRAY);
+        reportText.setForeground(Color.WHITE);
+        reportPanel.setBackground(Color.DARK_GRAY);
+        movementPanel.setBackground(Color.DARK_GRAY);
+        arenaLabel.setForeground(Color.WHITE);
+        arenaPanel.setBackground(Color.DARK_GRAY);
+    }
+
+    private static void addToPanel()
+    {
+        statsPanel.add(statsLabel);
+        statsPanel.add(statsScroll);
+
+        reportPanel.add(reportLabel);
+        reportPanel.add(reportScroll);
+
         movementPanel.add(btnNorth);
         movementPanel.add(btnSouth);
         movementPanel.add(btnEast);
@@ -85,20 +116,9 @@ public class guiPlayView
         movementPanel.add(btnContinue);
         movementPanel.add(btnExit);
         movementPanel.add(btnSwitch);
-        movementPanel.setBackground(Color.DARK_GRAY);
-        movementPanel.setPreferredSize( new Dimension( 1200, 200));
-        movementPanel.setLayout(null);
 
-
-        arenaLabel.setBounds(280, 10, 100, 20);
-        arenaLabel.setForeground(Color.WHITE);
-        mapPanel.setLayout(new GridLayout(5,5));
-        mapPanel.setBounds(0,40,600,495);
         arenaPanel.add(arenaLabel);
         arenaPanel.add(mapPanel);
-        arenaPanel.setBackground(Color.DARK_GRAY);
-        arenaPanel.setLayout(null);
-        arenaPanel.setPreferredSize( new Dimension( 600, 495 ) );
     }
 
     public static void displayPlayView()

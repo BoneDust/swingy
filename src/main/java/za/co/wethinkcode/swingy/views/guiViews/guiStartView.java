@@ -19,12 +19,16 @@ public class guiStartView
     private static JRadioButton rbtnNewHero = new JRadioButton("Create hero");
     private static JRadioButton rbtnPreviousHero = new JRadioButton("Select previous hero.");
 
-    public static void initStartView()
+    private static void initStartView()
     {
-        lblWelcome.setBounds(180, 10 ,200,20);
-        btnContinue.setBounds(200, 120 ,100,20);
-        rbtnNewHero.setBounds(100,  60,200,40);
-        rbtnPreviousHero.setBounds(300, 60 ,200,40);
+        setColors();
+        setBounds();
+        setListeners();
+        addToPanel();
+    }
+
+    private static void addToPanel()
+    {
         pWelcome.add(btnContinue);
         pWelcome.add(rbtnNewHero);
         pWelcome.add(rbtnPreviousHero);
@@ -32,12 +36,10 @@ public class guiStartView
         rbtnNewHero.setSelected(true);
         btnGroup.add(rbtnNewHero);
         btnGroup.add(rbtnPreviousHero);
-        lblWelcome.setForeground(Color.WHITE);
-        rbtnNewHero.setBackground(Color.DARK_GRAY);
-        rbtnPreviousHero.setBackground(Color.DARK_GRAY);
-        rbtnNewHero.setForeground(Color.WHITE);
-        rbtnPreviousHero.setForeground(Color.WHITE);
-        pWelcome.setBackground(Color.DARK_GRAY);
+    }
+
+    private static void setListeners()
+    {
         btnContinue.addActionListener(new ActionListener()
         {
             @Override
@@ -48,8 +50,31 @@ public class guiStartView
                     guiPlayerSelectionView.displaySelectionView();
                     frame.dispose();
                 }
+                else
+                {
+                    guiCreatePlayerView.displayCreatePlayerView();
+                    frame.dispose();
+                }
             }
         });
+    }
+
+    private static void setBounds()
+    {
+        lblWelcome.setBounds(180, 10 ,200,20);
+        btnContinue.setBounds(200, 120 ,100,20);
+        rbtnNewHero.setBounds(100,  60,200,40);
+        rbtnPreviousHero.setBounds(300, 60 ,200,40);
+    }
+
+    private static void setColors()
+    {
+        lblWelcome.setForeground(Color.WHITE);
+        rbtnNewHero.setBackground(Color.DARK_GRAY);
+        rbtnPreviousHero.setBackground(Color.DARK_GRAY);
+        rbtnNewHero.setForeground(Color.WHITE);
+        rbtnPreviousHero.setForeground(Color.WHITE);
+        pWelcome.setBackground(Color.DARK_GRAY);
     }
 
     public static void displayStartView()

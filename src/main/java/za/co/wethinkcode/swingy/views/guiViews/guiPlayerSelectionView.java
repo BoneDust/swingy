@@ -11,7 +11,6 @@ import java.util.Arrays;
 @Getter
 public class guiPlayerSelectionView
 {
-
     private static JFrame frame;
     private static JButton btnContinue;
     private static JButton btnBack;
@@ -22,7 +21,7 @@ public class guiPlayerSelectionView
     private static JTextArea info;
     private static JScrollPane jScrollPane;
 
-    public static  void initSelectionView()
+    private static  void initSelectionView()
     {
         frame = new JFrame("Swingy");
         btnContinue = new JButton("Start Game");
@@ -33,27 +32,43 @@ public class guiPlayerSelectionView
         lHeading = new JLabel("Hero Details");
         info = new JTextArea();
         jScrollPane = new JScrollPane(info);
+        info.setEditable(false);
+        setColors();
+        setBounds();
+        setListeners();
+        addToPanel();
+    }
 
-
-        lHeading.setBounds(180, 10 ,150,50);
-        jScrollPane.setBounds(50, 70, 350,300);
-        cbOptions.setBounds(100, 380, 250, 20);
-        btnBack.setBounds(100, 420 ,130,20);
-        btnContinue.setBounds(230, 420 ,130,20);
-        cbOptions.setBackground(Color.DARK_GRAY);
-        cbOptions.setForeground(Color.WHITE);
-        info.setBackground(Color.DARK_GRAY);
-        info.setForeground(Color.WHITE);
-        lHeading.setForeground(Color.WHITE);
+    private static void addToPanel()
+    {
         panel.add(btnBack);
         panel.add(btnContinue);
         panel.add(cbOptions);
         panel.add(lHeading);
         panel.add(jScrollPane);
+    }
+
+    private static void setBounds()
+    {
+        lHeading.setBounds(180, 10 ,150,20);
+        jScrollPane.setBounds(50, 70, 350,300);
+        cbOptions.setBounds(100, 380, 250, 20);
+        btnBack.setBounds(100, 420 ,130,20);
+        btnContinue.setBounds(230, 420 ,130,20);
+    }
+
+    private static void setColors()
+    {
+        cbOptions.setBackground(Color.DARK_GRAY);
+        cbOptions.setForeground(Color.WHITE);
+        info.setBackground(Color.DARK_GRAY);
+        info.setForeground(Color.WHITE);
+        lHeading.setForeground(Color.WHITE);
         panel.setBackground(Color.DARK_GRAY);
+    }
 
-
-        info.setEditable(false);
+    private static void setListeners()
+    {
         btnContinue.addActionListener(new ActionListener()
         {
             @Override
@@ -73,6 +88,7 @@ public class guiPlayerSelectionView
                 frame.setVisible(false);
             }
         });
+
         cbOptions.addActionListener(new ActionListener()
         {
             @Override
