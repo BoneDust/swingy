@@ -1,21 +1,15 @@
 package za.co.wethinkcode.swingy;
 
-import lombok.Getter;
-import lombok.Setter;
-import za.co.wethinkcode.swingy.views.guiViews.guiStartView;
+import za.co.wethinkcode.swingy.views.consoleViews.consoleDisplay;
+import za.co.wethinkcode.swingy.views.guiViews.guiDisplay;
 
-import java.awt.*;
-import javax.swing.*;
-
-@Getter
-@Setter
 public class Main
 {
-
-    public static void main (String[] args) throws Exception
+    public static void main (String[] args)
     {
-      //  DBController.createDB();
-       // DBController.initDB();
-        guiStartView.displayStartView();
+       guiDisplay gui = new guiDisplay();
+       consoleDisplay console = new consoleDisplay();
+       //gui.displayStartView();
+        console.displayStartView();
     }
 }
