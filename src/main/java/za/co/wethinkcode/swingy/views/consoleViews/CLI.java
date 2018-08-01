@@ -1,17 +1,5 @@
 package za.co.wethinkcode.swingy.views.consoleViews;
 
-import models.players.APlayer;
-import models.players.Hero;
-import models.world.Arena;
-import models.world.Position;
-import views.ISplashScreen;
-import views.IUserInterface;
-
-import java.util.Collection;
-
-import static state.GameStrings.APPLICATION_HEARDER;
-import static state.GameStrings.APPLICATION_SLOGAN;
-import static state.GameStrings.START_DIVIDER;
 
 public class CLI implements IUserInterface {
     private final ISplashScreen splashScreen;
@@ -20,12 +8,14 @@ public class CLI implements IUserInterface {
         splashScreen = new SplashScreenCli();
     }
 
-    public void displayLoadCreateHeroPrompt() {
+    public void displayPlayerSelectionView()
+    {
         clearScreen();
+        String input;
         System.out.print("" +
-                "Do you want to create a new player or load a player?\n" +
-                "1. New\n" +
-                "2. Load\n" +
+                "Do you want to create a new player or play with a saved player?\n" +
+                "1. New player\n" +
+                "2. Saved player\n" +
                 "3. Quit\n" +
                 "\nInput: ");
     }
@@ -67,21 +57,17 @@ public class CLI implements IUserInterface {
     }
 
     private void displayOptions() {
-        System.out.println("" +
-                "Directions       Actions        Game Options\n" +
-                "W - NORTH        F - FIGHT      Z - View Hero Stats\n" +
-                "A - WEST         R - RUN AWAY   X - Switch to GUI\n" +
-                "S - SOUTH                       C - Back To Main Menu\n" +
-                "D - EAST                        Q - Quit Game");
+        System.out.println(
+                "*******************************************" +
+                "* Direction         Game Options          *\n" +
+                "*                                         *\n"+
+                "* W - NORTH         C - Save and continue *\n" +
+                "* A - WEST          Z - Save and exit     *\n" +
+                "* S - SOUTH         X - Switch to gui     *\n" +
+                "* D - EAST                                *\n" +
+                "*******************************************");
     }
 
-    @Override
-    public void updateUserInterface(Arena arena) {
-        clearScreen();
-        System.out.println("The arena says : ");
-        System.out.println(arena.getGameResults().getResult());
-        showGameMapAndOptions(arena);
-    }
 
     private void clearScreen() {
         System.out.print("\033[H\033[2J");
@@ -111,14 +97,6 @@ public class CLI implements IUserInterface {
          int padSize = 100 - stringLength;
          return (padSize / 2) + stringLength;
      }
-
-    private void showGameMapAndOptions(Arena arena) {
-        System.out.println();
-        printMap(arena);
-        System.out.println();
-        displayOptions();
-
-    }
 
     public void promptNewGame(boolean heroWon) {
         String request = heroWon? "Start a new game" : "try again";
@@ -179,7 +157,8 @@ public class CLI implements IUserInterface {
         printToScreen("Choose an existing hero: ");
     }
 
-    public void displaySplaceScreen() {
+    public void displaySplaceScreen(
+            {
         clearScreen();
         splashScreen.show();
     }
