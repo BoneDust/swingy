@@ -24,8 +24,7 @@ public class Villain extends Player
 
     public Villain(int id, String name, String type, int level, int exp, int atk, int def, int hp, Coordinates pos)
     {
-        super(id, name, level, exp, atk, def, hp, pos);
-        this.setType(type);
+        super(id, name,type, level, exp, atk, def, hp, pos);
     }
 
     public String Attack()

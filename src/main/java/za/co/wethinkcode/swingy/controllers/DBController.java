@@ -67,7 +67,6 @@ public class DBController
         }
     }
 
-
     public static void initDB()
     {
         Connection connection = null;
@@ -96,39 +95,10 @@ public class DBController
                             "`atk` INT NOT NULL , " +
                             "`def` INT NOT NULL , " +
                             "`hp` INT NOT NULL , " +
-                            "`x_coord` INT NOT NULL , " +
-                            "`y_coord` INT NOT NULL , " +
                             "PRIMARY KEY (`id`));";
 
-            String createVillainTable =
-                    "CREATE TABLE if not exists `swingy`.`villains` (" +
-                            "`id` INT NOT NULL , " +
-                            "`playerId` INT NOT NULL , " +
-                            "`name` TEXT NOT NULL , " +
-                            "`type` TEXT NOT NULL , " +
-                            "`level` INT NOT NULL , " +
-                            "`exp` INT NOT NULL , " +
-                            "`atk` INT NOT NULL , " +
-                            "`def` INT NOT NULL , " +
-                            "`hp` INT NOT NULL , " +
-                            "`x_coord` INT NOT NULL , " +
-                            "`y_coord` INT NOT NULL , " +
-                            "`phrase` TEXT NOT NULL , " +
-                            "PRIMARY KEY (`id`), " +
-                            "FOREIGN KEY (`playerId`) REFERENCES swingy.heroes (`id`));";
-
-            String createMapTable =
-                    "CREATE TABLE if not exists `swingy`.`maps` (" +
-                            "`id` INT NOT NULL , " +
-                            "`playerId` INT NOT NULL," +
-                            "`size` INT NOT NULL , " +
-                            "PRIMARY KEY (`id`)," +
-                            "FOREIGN KEY (`playerId`) REFERENCES swingy.heroes (`id`)) ;";
-
             statement.executeUpdate(createHeroTable);
-            statement.executeUpdate(createVillainTable);
             statement.executeUpdate(createArtefactTable);
-            statement.executeUpdate(createMapTable);
         }
         catch (SQLException ex)
         {
@@ -138,53 +108,11 @@ public class DBController
         {
             closeDBConnection(connection, statement);
         }
-    }
-
-    public static ArrayList<Villain> getVillains(int playerId, int playerLevel)
-    {
-        ArrayList<Villain> villains = new ArrayList<>();
-        int id, level, exp, atk, def, hp, x_coord, y_coord;
-        String type, name;
-        Connection connection = null;
-        Statement statement = null;
-        try
-        {
-            connection = getConnection();
-            statement = connection.createStatement();
-            String selectPlayers = "select `id`, `name`, `type`, `level`, `exp`,`atk`, `def`, `hp`, `x_coord`," +
-                    " `y_coord` from `swingy`.`heroes`";
-            ResultSet results = statement.executeQuery(selectPlayers);
-            while(results.next())
-            {
-                id = results.getInt("id");
-                name = results.getString("name");
-                type = results.getString("type");
-                level = results.getInt("level");
-                exp = results.getInt("exp");
-                atk = results.getInt("atk");
-                def = results.getInt("def");
-                hp = results.getInt("hp");
-                x_coord = results.getInt("x_coord");
-                y_coord = results.getInt("y_coord");
-                int size = ((playerLevel - 1) * 5) + 10 - (playerLevel % 2);
-                Coordinates coordinates = CoordinateFactory.newCoordinates(x_coord, y_coord, size);
-                villains.add(VillainFactory.oldVillain(id, name, type, level, exp, atk, def, hp, coordinates));
-            }
-        }
-        catch (SQLException ex)
-        {
-            ex.printStackTrace();
-        }
-        finally
-        {
-            closeDBConnection(connection, statement);
-        }
-        return (villains);
     }
 
     public static Player getPlayer(int playerId)
     {
-        int id, level, exp, atk, def, hp, x_coord, y_coord;
+        int id, level, exp, atk, def, hp;
         String type, name;
         Connection connection = null;
         Statement statement = null;
@@ -193,8 +121,8 @@ public class DBController
         {
             connection = getConnection();
             statement = connection.createStatement();
-            String selectPlayer = String.format("select `id`, `name`, `type`, `level`, `exp`,`atk`, `def`, `hp`," +
-                                                " `x_coord`,`y_coord` from `swingy`.`heroes` where `id` = %d;", playerId);
+            String selectPlayer = String.format("select `id`, `name`, `type`, `level`, `exp`,`atk`, `def`, `hp`" +
+                                                " from `swingy`.`heroes` where `id` = %d;", playerId);
             ResultSet results = statement.executeQuery(selectPlayer);
             while(results.next())
             {
@@ -206,11 +134,9 @@ public class DBController
                 atk = results.getInt("atk");
                 def = results.getInt("def");
                 hp = results.getInt("hp");
-                x_coord = results.getInt("x_coord");
-                y_coord = results.getInt("y_coord");
                 int size = ((level - 1) * 5) + 10 - (level % 2);
-                Coordinates coordinates = CoordinateFactory.newCoordinates(x_coord, y_coord, size);
-                player = PlayerFactory.oldPlayer(id, name, type, level, exp, atk, def, hp, coordinates);
+                Coordinates coordinates = CoordinateFactory.newCoordinates(size / 2, size/ 2, size);
+                player = PlayerFactory.customPlayer(id, name, type, level, exp, atk, def, hp, coordinates);
             }
         }
         catch (SQLException ex)
@@ -226,7 +152,7 @@ public class DBController
 
     public static ArrayList<Player> getPlayers()
     {
-        int id, level, exp, atk, def, hp, x_coord, y_coord;
+        int id, level, exp, atk, def, hp;
         String type, name;
         Connection connection = null;
         Statement statement = null;
@@ -235,8 +161,8 @@ public class DBController
         {
             connection = getConnection();
             statement = connection.createStatement();
-            String selectPlayers = "select `id`, `name`, `type`, `level`, `exp`,`atk`, `def`, `hp`, `x_coord`," +
-                                    " `y_coord` from `swingy`.`heroes`";
+            String selectPlayers = "select `id`, `name`, `type`, `level`, `exp`,`atk`, `def`, `hp`" +
+                                    "from `swingy`.`heroes`";
             ResultSet results = statement.executeQuery(selectPlayers);
             while(results.next())
             {
@@ -248,10 +174,8 @@ public class DBController
                 atk = results.getInt("atk");
                 def = results.getInt("def");
                 hp = results.getInt("hp");
-                x_coord = results.getInt("x_coord");
-                y_coord = results.getInt("y_coord");
                 int size = ((level - 1) * 5) + 10 - (level % 2);
-                Coordinates coordinates = CoordinateFactory.newCoordinates(x_coord, y_coord, size);
+                Coordinates coordinates = CoordinateFactory.newCoordinates(size / 2, size / 2, size);
                 players.add(PlayerFactory.oldPlayer(id, name, type, level, exp, atk, def, hp, coordinates));
             }
         }
@@ -300,37 +224,6 @@ public class DBController
         return (artefacts);
     }
 
-    public static Map getMap(int playerId)
-    {
-        int size;
-        int mapId;
-        Connection connection = null;
-        Statement statement = null;
-        Map map = null;
-        try
-        {
-            connection = getConnection();
-            statement = connection.createStatement();
-            String selectMap = String.format("select `id`, `size` from `swingy`.`maps` where `playerId` = %d", playerId);
-            ResultSet results = statement.executeQuery(selectMap);
-            while(results.next())
-            {
-                mapId = results.getInt("id");
-                size = results.getInt("size");
-                map = MapFactory.oldMap(size, mapId);
-            }
-        }
-        catch (SQLException ex)
-        {
-            ex.printStackTrace();
-        }
-        finally
-        {
-            closeDBConnection(connection, statement);
-        }
-        return (map);
-    }
-
     public static void recordHero(Player player)
     {
         Connection connection = null;
@@ -339,67 +232,18 @@ public class DBController
         {
             connection = getConnection();
             statement = connection.createStatement();
-            String type;
-            if (player instanceof Swordsman)
-                type = "Swordsman";
-            else if (player instanceof Gunman)
-                type = "Gunman";
-            else if (player instanceof KungFuMaster)
-                type = "KungFuMaster";
-            else
-                type = "";
             String insertHero = String.format("INSERT INTO `swingy`.`heroes` (`id`, `name`, `type`, `level`, `exp`," +
-                            " `atk`, `def`, `hp`, `x_coord`, `y_coord`)" +
-                            " VALUES (%d, %s, %s, %d, %d, %d, %d, %d, %d, %d);",
+                            " `atk`, `def`, `hp`)" +
+                            " VALUES (%d, %s, %s, %d, %d, %d, %d, %d);",
                     player.getId(),
                     player.getName(),
-                    type,
+                    player.getType()),
                     player.getLevel(),
                     player.getExp(),
                     player.getAtk(),
                     player.getDef(),
-                    player.getHp(),
-                    player.getCoordinates().getX(),
-                    player.getCoordinates().getY());
+                    player.getHp();
             statement.executeUpdate(insertHero);
-        }
-        catch (SQLException ex)
-        {
-            ex.printStackTrace();
-        }
-        finally
-        {
-            closeDBConnection(connection, statement);
-        }
-    }
-
-    public static void recordVillains(ArrayList<Villain> villains, int playerId)
-    {
-        Connection connection = null;
-        Statement statement = null;
-        try
-        {
-            connection = getConnection();
-            statement = connection.createStatement();
-            for (Villain villain : villains)
-            {
-                String insertVillain = String.format("INSERT INTO `swingy`.`villains` (`id`, 'playerId`, `name`," +
-                                " `type`, `level`, `exp`, `atk`, `def`, `hp`, `x_coord`, `y_coord`, `phrase`)" +
-                                " VALUES (%d, %d, %s, %s, %d, %d, %d, %d, %d, %d, %d, %s);",
-                        villain.getId(),
-                        playerId,
-                        villain.getName(),
-                        villain.getType(),
-                        villain.getLevel(),
-                        villain.getExp(),
-                        villain.getAtk(),
-                        villain.getDef(),
-                        villain.getHp(),
-                        villain.getCoordinates().getX(),
-                        villain.getCoordinates().getY(),
-                        villain.getCatchPhrase());
-                statement.executeUpdate(insertVillain);
-            }
         }
         catch (SQLException ex)
         {
@@ -431,31 +275,6 @@ public class DBController
                         artefact.getValue());
                 statement.executeUpdate(insertArtefact);
             }
-        }
-        catch (SQLException ex)
-        {
-            ex.printStackTrace();
-        }
-        finally
-        {
-            closeDBConnection(connection, statement);
-        }
-    }
-
-    public static void recordMap(Map map, int playerId)
-    {
-        Connection connection = null;
-        Statement statement = null;
-        try
-        {
-            connection = getConnection();
-            statement = connection.createStatement();
-            String insertMap = String.format("INSERT INTO `swingy`.`maps` (`id`, `playerId`, `size`)" +
-                            " VALUES (%d, %d, %d);",
-                    map.getId(),
-                    playerId,
-                    map.getSize());
-            statement.executeUpdate(insertMap);
         }
         catch (SQLException ex)
         {

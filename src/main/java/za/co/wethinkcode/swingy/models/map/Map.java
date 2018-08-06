@@ -17,17 +17,11 @@ public class Map
     @Max(value = 55, message = "A map's dimensions cannot exceed MAX map size i.e 55.")
     private int size;
 
-    @NotNull
-    @Min(value = 0, message = "Map id must be greater than 0.")
-    @Max(value = 2147483647, message = "Map id cannot exceed MAX_INT value.")
-    private int id;
-
     @ValidateMapGrid
     private int[][] grid;
 
-    public Map(int size, int id)
+    public Map(int size)
     {
-        this.id = id;
         this.setSize(size);
         initGrid();
     }

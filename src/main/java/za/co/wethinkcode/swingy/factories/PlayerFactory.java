@@ -1,5 +1,7 @@
 package za.co.wethinkcode.swingy.factories;
 
+import lombok.Getter;
+import lombok.Setter;
 import za.co.wethinkcode.swingy.models.map.Coordinates;
 import za.co.wethinkcode.swingy.models.playables.*;
 import javax.validation.ConstraintViolation;
@@ -8,8 +10,11 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.util.Set;
 
+@Getter
+@Setter
 public class PlayerFactory
 {
+    //todo the errors need refactoring. need to put them into an array in Controller
 
     private static int id = 0;
     private static Player validatePlayer(Player player)
@@ -31,7 +36,7 @@ public class PlayerFactory
         return (player);
     }
 
-    public static Player oldPlayer(int id, String name, String type, int lvl, int exp, int atk, int def, int hp,
+    public static Player customPlayer(int id, String name, String type, int lvl, int exp, int atk, int def, int hp,
                                    Coordinates coordinates)
     {
         Player player;
@@ -42,14 +47,12 @@ public class PlayerFactory
             player = new KungFuMaster(id, name, type, lvl, exp, atk, def, hp, coordinates);
         else if (type.equals("Swordsman"))
             player = new Swordsman(id, name, type, lvl, exp, atk, def, hp, coordinates);
-        else if (type.equals("Villain"))
-            player = VillainFactory.oldVillain(id, name, type, lvl, exp, atk, def, hp, coordinates);
         else
             player = null;
         return (validatePlayer(player));
     }
 
-    public static Player newPlayer(String name, String type, Coordinates coordinates)
+    public static Player defaultPlayer(String name, String type, Coordinates coordinates)
     {
 
         Player player;

@@ -10,21 +10,15 @@ import javax.validation.constraints.NotNull;
 @Getter
 public class Swordsman extends Player implements Playable
 {
-    @NotNull
-    @ValidateType(types = {"Swordsman"})
-    private String type;
-
     public Swordsman(int id,String name, String type, int level, int exp, int atk, int def, int hp,
                      Coordinates coordinates)
     {
-        super(id, name, level, exp, atk, def, hp, coordinates);
-        this.setType(type);
+        super(id, name,type, level, exp, atk, def, hp, coordinates);
     }
 
     public Swordsman(int id, String name, Coordinates coordinates)
     {
-        super(id, name, 1, 0, 60, 25, 200, coordinates);
-        this.setType("Swordsman");
+        super(id, name, "Swordsman",1, 1000, 60, 25, 200, coordinates);
     }
 
     public String Attack(Playable playable)

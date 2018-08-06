@@ -10,21 +10,16 @@ import javax.validation.constraints.NotNull;
 @Getter
 public class Gunman extends Player implements Playable
 {
-    @NotNull
-    @ValidateType(types = {"Gunman"})
-    private String type;
 
     public Gunman(int id, String name, String type, int level, int exp, int atk, int def, int hp,
                   Coordinates coordinates)
     {
-        super(id, name, level, exp, atk, def, hp, coordinates);
-        this.setType(type);
+        super(id, name,type, level, exp, atk, def, hp, coordinates);
     }
 
     public Gunman(int id, String name, Coordinates coordinates)
     {
-        super(id, name, 1, 0, 80, 15, 350, coordinates);
-        this.setType("Gunman");
+        super(id, name,"Gunman", 1, 1000, 80, 15, 350, coordinates);
     }
 
     public String Attack(Playable playable)

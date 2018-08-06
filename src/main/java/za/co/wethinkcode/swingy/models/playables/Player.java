@@ -7,6 +7,8 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import za.co.wethinkcode.swingy.annotations.ValidateType;
 import za.co.wethinkcode.swingy.models.artefacts.Artefact;
 import za.co.wethinkcode.swingy.models.map.Coordinates;
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import java.util.List;
 //http://www.summa.com/blog/2013/05/30/creating-custom-validation-constraints
 public class Player
 {
+
     @NotNull
     @Valid
     protected List<Artefact> artefacts;
@@ -29,6 +32,10 @@ public class Player
     @NotNull
     @Size(min = 4, max = 15, message = "The length of a character's name must be between 4 and 15.")
     protected String name;
+
+    @NotNull
+    @ValidateType(types = {"Gunman", "Swordsman", "KungFuMaster", "Villain"}, message = "Invalid class")
+    protected String type;
 
     @NotNull
     @Min(value = 0, message = "Player level cannot be lower than 0.")
@@ -54,10 +61,11 @@ public class Player
     @Valid
     protected Coordinates coordinates;
 
-    public Player(int id, String name, int level, int exp, int atk, int def, int hp, Coordinates coordinates)
+    public Player(int id, String name, String type, int level, int exp, int atk, int def, int hp, Coordinates coordinates)
     {
         this.setId(id);
         this.setName(name);
+        this.setType(type);
         this.setLevel(level);
         this.setExp(exp);
         this.setAtk(atk);
