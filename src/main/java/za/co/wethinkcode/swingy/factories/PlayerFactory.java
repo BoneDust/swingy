@@ -2,6 +2,7 @@ package za.co.wethinkcode.swingy.factories;
 
 import lombok.Getter;
 import lombok.Setter;
+import za.co.wethinkcode.swingy.controllers.GameController;
 import za.co.wethinkcode.swingy.models.map.Coordinates;
 import za.co.wethinkcode.swingy.models.playables.*;
 import javax.validation.ConstraintViolation;
@@ -14,23 +15,17 @@ import java.util.Set;
 @Setter
 public class PlayerFactory
 {
-    //todo the errors need refactoring. need to put them into an array in Controller
-
-    private static int id = 0;
+        private static int id = 0;
     private static Player validatePlayer(Player player)
     {
-        final String ANSI_RED = "\u001B[31m";
-        final String ANSI_RESET = "\u001B[0m";
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
 
         Set<ConstraintViolation<Player>> constraintViolations = validator.validate(player);
         if (constraintViolations.size() > 0 )
         {
-            System.out.println(ANSI_RED + "\n\n<<< Failed player validations >>>\n");
             for (ConstraintViolation<Player> constraints : constraintViolations)
-                System.out.println("Error :" + constraints.getMessage());
-            System.out.println(ANSI_RESET);
+                GameController.getErrors().add("Error :" + constraints.getMessage());
             return (null);
         }
         return (player);
@@ -38,7 +33,7 @@ public class PlayerFactory
 
     public static Player customPlayer(int id, String name, String type, int lvl, int exp, int atk, int def, int hp,
                                    Coordinates coordinates)
-    {
+    {//todo remem to increment id when creating this in controller.
         Player player;
 
         if (type.equals("Gunman"))
@@ -79,6 +74,9 @@ public class PlayerFactory
         }
         else
             player = null;
-        return (validatePlayer(player));
+        if (!(player instanceof Villain))
+            return (validatePlayer(player));
+        else
+            return (player);
     }
 }

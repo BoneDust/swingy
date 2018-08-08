@@ -30,7 +30,7 @@ public class Player
     private int id;
 
     @NotNull
-    @Size(min = 4, max = 15, message = "The length of a character's name must be between 4 and 15.")
+    @Size(min = 4, max = 15, message = "The length of a player's name must be between 4 and 15.")
     protected String name;
 
     @NotNull
@@ -54,7 +54,7 @@ public class Player
     protected int def;
 
     @NotNull
-    @Min(value = 0, message = "Player hp cannot be lower than 0.")
+    @Min(value = 0, message = "Player hp should be greater than 0.")
     protected int hp;
 
     @NotNull

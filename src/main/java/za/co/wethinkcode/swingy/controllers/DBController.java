@@ -121,7 +121,7 @@ public class DBController
         {
             connection = getConnection();
             statement = connection.createStatement();
-            String selectPlayer = String.format("select `id`, `name`, `type`, `level`, `exp`,`atk`, `def`, `hp`" +
+            String selectPlayer = String.format("select *" +
                                                 " from `swingy`.`heroes` where `id` = %d;", playerId);
             ResultSet results = statement.executeQuery(selectPlayer);
             while(results.next())
@@ -161,7 +161,7 @@ public class DBController
         {
             connection = getConnection();
             statement = connection.createStatement();
-            String selectPlayers = "select `id`, `name`, `type`, `level`, `exp`,`atk`, `def`, `hp`" +
+            String selectPlayers = "select *" +
                                     "from `swingy`.`heroes`";
             ResultSet results = statement.executeQuery(selectPlayers);
             while(results.next())
@@ -176,7 +176,7 @@ public class DBController
                 hp = results.getInt("hp");
                 int size = ((level - 1) * 5) + 10 - (level % 2);
                 Coordinates coordinates = CoordinateFactory.newCoordinates(size / 2, size / 2, size);
-                players.add(PlayerFactory.oldPlayer(id, name, type, level, exp, atk, def, hp, coordinates));
+                players.add(PlayerFactory.customPlayer(id, name, type, level, exp, atk, def, hp, coordinates));
             }
         }
         catch (SQLException ex)
@@ -201,7 +201,7 @@ public class DBController
         {
             connection = getConnection();
             statement = connection.createStatement();
-            String selectArtefacts = String.format("select `id`, `name`, `type`, `value` from `swingy`.`artefacts`" +
+            String selectArtefacts = String.format("select * from `swingy`.`artefacts`" +
                                                     " where `playerId` = %d", playerId);
             ResultSet results = statement.executeQuery(selectArtefacts);
             while(results.next())
@@ -224,6 +224,20 @@ public class DBController
         return (artefacts);
     }
 
+    public static String updateHeroString(Player player)
+    {
+        String updateHero = String.format("UPDATE `swingy`.`heroes` SET `level` = %d, `exp` = %d, `atk` = %d," +
+                        " `def` = %d, `hp` = %d WHERE `id` = %d;" +,
+                player.getLevel(),
+                player.getExp(),
+                player.getAtk(),
+                player.getDef(),
+                player.getHp(),
+                player.getId()
+        );
+        return (updateHero);
+    }
+
     public static void recordHero(Player player)
     {
         Connection connection = null;
@@ -232,18 +246,27 @@ public class DBController
         {
             connection = getConnection();
             statement = connection.createStatement();
-            String insertHero = String.format("INSERT INTO `swingy`.`heroes` (`id`, `name`, `type`, `level`, `exp`," +
-                            " `atk`, `def`, `hp`)" +
-                            " VALUES (%d, %s, %s, %d, %d, %d, %d, %d);",
-                    player.getId(),
-                    player.getName(),
-                    player.getType()),
-                    player.getLevel(),
-                    player.getExp(),
-                    player.getAtk(),
-                    player.getDef(),
-                    player.getHp();
-            statement.executeUpdate(insertHero);
+            String selectPlayer = String.format("select * from `swingy`.`heroes`" +
+                    " where `playerId` = %d", player.getId());
+            ResultSet results = statement.executeQuery(selectPlayer);
+            if (results.next())
+                statement.executeUpdate(updateHeroString(player));
+            else
+            {
+                String insertHero = String.format("INSERT INTO `swingy`.`heroes` (`id`, `name`, `type`, `level`, `exp`," +
+                                " `atk`, `def`, `hp`)" +
+                                " VALUES (%d, %s, %s, %d, %d, %d, %d, %d);",
+                        player.getId(),
+                        player.getName(),
+                        player.getType(),
+                        player.getLevel(),
+                        player.getExp(),
+                        player.getAtk(),
+                        player.getDef(),
+                        player.getHp()
+                );
+                statement.executeUpdate(insertHero);
+            }
         }
         catch (SQLException ex)
         {
