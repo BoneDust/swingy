@@ -201,9 +201,29 @@ public class GameController
             display = new consoleDisplay();
     }
 
-    public void playGame()//todo
+    public void playGame()
     {
-
+        switch (currentStage)
+        {
+            case START:
+                display.displayStartView();
+                break;
+            case CREATION:
+                display.displayCreatePlayerView();
+                break;
+            case SELECTION:
+                display.displayPlayerSelectionView();
+                break;
+            case PLAY:
+                display.displayPlayView();
+                break;
+            case GAMEOVER:
+                display.displayGameOver();
+                break;
+            default:
+                gameContinues = false;
+                break
+        }
     }
 
     private void saveHero()
