@@ -13,10 +13,11 @@ public class ArtefactFactory
 {
     private static int id = 0;
 
-    public static Artefact newArtefact(int value, String name, String type)
+    public static Artefact newArtefact(int value, String type)
     {
         id++;
-        Artefact artefact = new Artefact(name,type,value, id);
+
+        Artefact artefact = new Artefact(type +"_"+id,type,value, id);
         return (artefact);
     }
 

@@ -33,7 +33,7 @@ public class PlayerFactory
 
     public static Player customPlayer(int id, String name, String type, int lvl, int exp, int atk, int def, int hp,
                                    Coordinates coordinates)
-    {//todo remem to increment id when creating this in controller.
+    {
         Player player;
 
         if (type.equals("Gunman"))
@@ -67,16 +67,8 @@ public class PlayerFactory
             id++;
             player = new Swordsman(id, name, coordinates);
         }
-        else if (type.equals("Villain"))
-        {
-            id++;
-            player = VillainFactory.newVillain(id, name, type, coordinates);
-        }
         else
             player = null;
-        if (!(player instanceof Villain))
-            return (validatePlayer(player));
-        else
-            return (player);
+        return (validatePlayer(player));
     }
 }

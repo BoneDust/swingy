@@ -110,46 +110,6 @@ public class DBController
         }
     }
 
-    public static Player getPlayer(int playerId)
-    {
-        int id, level, exp, atk, def, hp;
-        String type, name;
-        Connection connection = null;
-        Statement statement = null;
-        Player player = null;
-        try
-        {
-            connection = getConnection();
-            statement = connection.createStatement();
-            String selectPlayer = String.format("select *" +
-                                                " from `swingy`.`heroes` where `id` = %d;", playerId);
-            ResultSet results = statement.executeQuery(selectPlayer);
-            while(results.next())
-            {
-                id = results.getInt("id");
-                name = results.getString("name");
-                type = results.getString("type");
-                level = results.getInt("level");
-                exp = results.getInt("exp");
-                atk = results.getInt("atk");
-                def = results.getInt("def");
-                hp = results.getInt("hp");
-                int size = ((level - 1) * 5) + 10 - (level % 2);
-                Coordinates coordinates = CoordinateFactory.newCoordinates(size / 2, size/ 2, size);
-                player = PlayerFactory.customPlayer(id, name, type, level, exp, atk, def, hp, coordinates);
-            }
-        }
-        catch (SQLException ex)
-        {
-            ex.printStackTrace();
-        }
-        finally
-        {
-            closeDBConnection(connection, statement);
-        }
-        return (player);
-    }
-
     public static ArrayList<Player> getPlayers()
     {
         int id, level, exp, atk, def, hp;
@@ -176,7 +136,9 @@ public class DBController
                 hp = results.getInt("hp");
                 int size = ((level - 1) * 5) + 10 - (level % 2);
                 Coordinates coordinates = CoordinateFactory.newCoordinates(size / 2, size / 2, size);
-                players.add(PlayerFactory.customPlayer(id, name, type, level, exp, atk, def, hp, coordinates));
+                Player player = PlayerFactory.customPlayer(id, name, type, level, exp, atk, def, hp, coordinates);
+                player.setArtefacts(getArtefacts(player.getId()));
+                players.add(player);
             }
         }
         catch (SQLException ex)
@@ -190,7 +152,7 @@ public class DBController
         return (players);
     }
 
-    public static ArrayList<Artefact> getArtefacts(int playerId)
+    private static ArrayList<Artefact> getArtefacts(int playerId)
     {
         int id, value;
         String type, name;
@@ -267,6 +229,8 @@ public class DBController
                 );
                 statement.executeUpdate(insertHero);
             }
+            statement.executeUpdate("DROP * FROM `swingy`.`artefacts'`");
+            recordArtefacts(player.getArtefacts(), player.getId());
         }
         catch (SQLException ex)
         {
@@ -278,7 +242,7 @@ public class DBController
         }
     }
 
-    public static void recordArtefacts(ArrayList<Artefact> artefacts, int playerId)
+    private static void recordArtefacts(ArrayList<Artefact> artefacts, int playerId)
     {
         Connection connection = null;
         Statement statement = null;

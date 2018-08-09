@@ -18,16 +18,11 @@ public class Map
     private int size;
 
     @ValidateMapGrid
-    private int[][] grid;
+    private static int[][] grid;
 
     public Map(int size)
     {
         this.setSize(size);
-        initGrid();
-    }
-
-    private void initGrid()
-    {
-        grid = new int[this.getSize()][this.getSize()];
+        grid = new int[size][size];
     }
 }

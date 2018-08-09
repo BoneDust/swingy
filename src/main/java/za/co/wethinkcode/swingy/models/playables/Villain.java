@@ -17,23 +17,8 @@ public class Villain extends Player
     @Size(min = 5, max = 50, message = "A villain's catchphrase must be  5-50 characters long.")
     private String catchPhrase;
 
-    @NotNull
-    @ValidateType(types = {"Villain"})
-    private String type;
-
-
     public Villain(int id, String name, String type, int level, int exp, int atk, int def, int hp, Coordinates pos)
     {
         super(id, name,type, level, exp, atk, def, hp, pos);
-    }
-
-    public String Attack()
-    {
-        return ("Take a hit worth "+ this.getAtk()+" damage points from the mighty " + this.getName());
-    }
-
-    public String Defend()
-    {
-        return ("The great "+ this.getName()+" just defended an attack with " + this.getDef() + " defence points.");
     }
 }

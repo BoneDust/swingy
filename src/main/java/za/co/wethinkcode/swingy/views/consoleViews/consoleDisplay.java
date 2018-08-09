@@ -229,10 +229,10 @@ public class consoleDisplay implements IDisplay
             atk = retrieveStat("Atk", stdin);
             def = retrieveStat("Def", stdin);
             hp = retrieveStat("Hp", stdin);
-            GameController.createCustomHero(type, name,level, atk, def, hp);//todo remember increment factory id and exp calculations
+            GameController.createCustomHero(type, name,level, atk, def, hp);
         }
         while (GameController.getHero() == null);
-        GameController.receiveInput("");
+        GameController.receiveUserInput("");
     }
 
     public void displayErrors(ArrayList<String> errors)
