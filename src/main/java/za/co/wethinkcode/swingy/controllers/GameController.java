@@ -21,7 +21,9 @@ import java.util.Random;
 public class GameController
 {
     private enum gameStage{START, SELECTION, CREATION, PLAY, GAMEOVER};
+    private enum creationStage{HERO_TYPE, NAME_PROMPT, CREATION_TYPE, STATS};
     private gameStage currentStage;
+    private creationStage creatingStage;
     private enum movement{UP, DOWN, LEFT, RIGHT};
     private Player hero;
     private ArrayList<Player> heroes;
@@ -35,10 +37,14 @@ public class GameController
     public GameController(String view)
     {
         if (view.equals("console"))
-            display = new consoleDisplay();
+            display = new consoleDisplay(this);
         else
+        {
+            System.out.println(view);
             display = new guiDisplay();
+        }
         currentStage = gameStage.START;
+        creatingStage = creationStage.HERO_TYPE;
         gameContinues = true;
         heroes = new ArrayList<>();
         villains = new ArrayList<>();
@@ -164,7 +170,7 @@ public class GameController
         else
         {
             report += "\n You lost!!!\n";
-            currentStage = gameStage.GAMEOVER
+            currentStage = gameStage.GAMEOVER;
         }
         return (report);
     }
@@ -191,6 +197,76 @@ public class GameController
     public void receiveUserInput(String input)//todo
     {
 
+        switch (currentStage)
+        {
+            case START:
+                if (input.equals("1"))
+                    currentStage = gameStage.CREATION;
+                else if (input.equals("2"))
+                    currentStage = gameStage.SELECTION;
+                else
+                    System.exit(1);
+                break;
+            case CREATION:
+                if (display instanceof consoleDisplay)
+                {
+                    String type = "", name="";
+
+                    if (creatingStage == creationStage.HERO_TYPE)
+                    {
+                        creatingStage = creationStage.NAME_PROMPT;
+                        display.displayCreatePlayerView();
+                    }
+                    else if (creatingStage == creationStage.NAME_PROMPT)
+                    {
+                        creatingStage = creationStage.CREATION_TYPE;
+                        if (input.equals("1"))
+                            type = "Swordsman";
+                        else if (input.equals("2"))
+                            type = "Gunman";
+                        else
+                            type = "KungFuMaster";
+                        ((consoleDisplay) display).displayHeroNamePrompt(type);
+                    }
+
+                    else if (creatingStage == creationStage.CREATION_TYPE)
+                    {
+                        creatingStage = creationStage.STATS;
+                        name = input;
+                        ((consoleDisplay) display).displayDefaultOrCustomHero(type, name);
+                    }
+
+                    else
+                    {
+                        if (input.equals("1"))
+                            ((consoleDisplay)display).displayHeroStatsPrompt(type, name);
+                        else
+                            this.createDefaultHero(type, name);
+                        currentStage = gameStage.PLAY;
+                    }
+                }
+                break;
+            case SELECTION:
+                if (input.equals("q"))
+                     System.exit(1);
+                else
+                {
+                    retrieveHeroes();
+                    retrieveHero(Integer.parseInt(input));
+                    currentStage = gameStage.PLAY;
+                }
+                break;
+            case PLAY:
+                creatingStage = creationStage.HERO_TYPE;
+                display.displayPlayView();
+                break;
+            case GAMEOVER:
+                display.displayGameOver();
+                break;
+            default:
+                gameContinues = false;
+                break;
+        }
     }
 
     private void switchDisplays()
@@ -222,7 +298,7 @@ public class GameController
                 break;
             default:
                 gameContinues = false;
-                break
+                break;
         }
     }
 
@@ -237,6 +313,18 @@ public class GameController
         heroes = DBController.getPlayers();
     }
 
+
+    private void retrieveHero(int id)
+    {
+        for (Player player : heroes)
+        {
+            if (player.getId() == id)
+            {
+                hero = player;
+                break;
+            }
+        }
+    }
 
     private void pickUpArtefact()
     {
