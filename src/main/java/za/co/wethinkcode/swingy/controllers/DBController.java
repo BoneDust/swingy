@@ -12,7 +12,14 @@ import java.util.ArrayList;
 //http://www.benchresources.net/jdbc-getting-single-record-using-jdbc-preparedstatement-interface/
 public class DBController
 {
-    private static void closeDBConnection(Connection connection, Statement statement)
+    private  GameController gameController;
+
+    public DBController(GameController controller)
+    {
+        gameController = controller;
+    }
+
+    private void closeDBConnection(Connection connection, Statement statement)
     {
         try
         {
@@ -27,7 +34,7 @@ public class DBController
         }
     }
 
-    private static Connection getConnection()
+    private Connection getConnection()
     {
         Connection conn = null;
         try
@@ -46,7 +53,7 @@ public class DBController
         return (conn);
     }
 
-    public static void createDB()
+    public void createDB()
     {
         Connection connection = null;
         Statement statement = null;
@@ -67,7 +74,7 @@ public class DBController
         }
     }
 
-    public static void initDB()
+    public void initDB()
     {
         Connection connection = null;
         Statement statement = null;
@@ -110,7 +117,7 @@ public class DBController
         }
     }
 
-    public static ArrayList<Player> getPlayers()
+    public ArrayList<Player> getPlayers()
     {
         int id, level, exp, atk, def, hp;
         String type, name;
@@ -135,8 +142,9 @@ public class DBController
                 def = results.getInt("def");
                 hp = results.getInt("hp");
                 int size = ((level - 1) * 5) + 10 - (level % 2);
-                Coordinates coordinates = CoordinateFactory.newCoordinates(size / 2, size / 2, size);
-                Player player = PlayerFactory.customPlayer(id, name, type, level, exp, atk, def, hp, coordinates);
+                Coordinates coordinates = CoordinateFactory.newCoordinates(size / 2, size / 2, null);
+                Player player = PlayerFactory.customPlayer(id, name, type, level, exp, atk, def, hp, coordinates,
+                                                            gameController);
                 player.setArtefacts(getArtefacts(player.getId()));
                 players.add(player);
             }
@@ -152,7 +160,7 @@ public class DBController
         return (players);
     }
 
-    private static ArrayList<Artefact> getArtefacts(int playerId)
+    private ArrayList<Artefact> getArtefacts(int playerId)
     {
         int id, value;
         String type, name;
@@ -186,10 +194,10 @@ public class DBController
         return (artefacts);
     }
 
-    public static String updateHeroString(Player player)
+    public String updateHeroString(Player player)
     {
         String updateHero = String.format("UPDATE `swingy`.`heroes` SET `level` = %d, `exp` = %d, `atk` = %d," +
-                        " `def` = %d, `hp` = %d WHERE `id` = %d;" +,
+                        " `def` = %d, `hp` = %d WHERE `id` = %d;" ,
                 player.getLevel(),
                 player.getExp(),
                 player.getAtk(),
@@ -200,7 +208,7 @@ public class DBController
         return (updateHero);
     }
 
-    public static void recordHero(Player player)
+    public void recordHero(Player player)
     {
         Connection connection = null;
         Statement statement = null;
@@ -242,7 +250,7 @@ public class DBController
         }
     }
 
-    private static void recordArtefacts(ArrayList<Artefact> artefacts, int playerId)
+    private void recordArtefacts(ArrayList<Artefact> artefacts, int playerId)
     {
         Connection connection = null;
         Statement statement = null;

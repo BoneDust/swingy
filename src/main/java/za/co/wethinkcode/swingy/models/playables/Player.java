@@ -22,12 +22,12 @@ public class Player
 
     @NotNull
     @Valid
-    protected List<Artefact> artefacts;
+    protected ArrayList<Artefact> artefacts;
 
     @NotNull
     @Min(value = 0, message = "Player id must be greater than 0.")
     @Max(value = 2147483647, message = "Player id cannot exceed MAX_INT value.")
-    private int id;
+    protected int id;
 
     @NotNull
     @Size(min = 4, max = 15, message = "The length of a player's name must be between 4 and 15.")

@@ -11,12 +11,23 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.util.Set;
 
-@Getter
 @Setter
+@Getter
 public class PlayerFactory
 {
-        private static int id = 0;
-    private static Player validatePlayer(Player player)
+    public static int id = 0;
+
+    public static int getId()
+    {
+        return (id);
+    }
+
+    public static void setId(int Id)
+    {
+        id = Id;
+    }
+
+    private static Player validatePlayer(Player player, GameController controller)
     {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
@@ -25,14 +36,14 @@ public class PlayerFactory
         if (constraintViolations.size() > 0 )
         {
             for (ConstraintViolation<Player> constraints : constraintViolations)
-                GameController.getErrors().add("Error :" + constraints.getMessage());
+                controller.getErrors().add("Error :" + constraints.getMessage());
             return (null);
         }
         return (player);
     }
 
     public static Player customPlayer(int id, String name, String type, int lvl, int exp, int atk, int def, int hp,
-                                   Coordinates coordinates)
+                                   Coordinates coordinates, GameController controller)
     {
         Player player;
 
@@ -44,10 +55,10 @@ public class PlayerFactory
             player = new Swordsman(id, name, type, lvl, exp, atk, def, hp, coordinates);
         else
             player = null;
-        return (validatePlayer(player));
+        return (validatePlayer(player, controller));
     }
 
-    public static Player defaultPlayer(String name, String type, Coordinates coordinates)
+    public static Player defaultPlayer(String name, String type, Coordinates coordinates, GameController controller)
     {
 
         Player player;
@@ -69,6 +80,6 @@ public class PlayerFactory
         }
         else
             player = null;
-        return (validatePlayer(player));
+        return (validatePlayer(player, controller));
     }
 }

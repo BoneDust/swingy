@@ -14,7 +14,7 @@ public class CoordinateFactory
     public static Coordinates newCoordinates(int x, int y, final Map map)
     {
         Coordinates coordinates = null;
-        if (map == null || map.getGrid[y][x] == 0)
+        if (map == null || map.getGrid()[y][x] == 0)
             coordinates = new Coordinates(x, y);
         return (coordinates);
     }
