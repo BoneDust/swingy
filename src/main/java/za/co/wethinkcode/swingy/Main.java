@@ -15,6 +15,5 @@ public class Main
             controller.playGame();
             play = controller.isGameContinues();
         }
-
     }
 }

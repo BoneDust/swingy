@@ -20,7 +20,7 @@ import java.util.Random;
 
 public class GameController
 {
-    private enum gameStage{START, SELECTION, CREATION, PLAY, RUN_FIGHT, GAMEOVER, QUIT};
+    private enum gameStage{START, SELECTION, CREATION, ERRORS, PLAY, RUN_FIGHT, GAMEOVER, QUIT};
     private enum creationStage{HERO_TYPE, NAME_PROMPT, CREATION_TYPE, STATS};
     private gameStage currentStage;
     private DBController dbController;
@@ -52,8 +52,8 @@ public class GameController
         errors = new ArrayList<>();
         map = null;
         dbController = new DBController(this);
-       // dbController.createDB();
-        //dbController.initDB();
+        dbController.createDB();
+        dbController.initDB();
     }
 
     public boolean isGameContinues()
@@ -143,10 +143,15 @@ public class GameController
                     ((consoleDisplay)display).displayHeroStatsPrompt(name, type);
                 else
                     this.createDefaultHero(type, name);
-                createVillains();
-                updateMap();
-                currentStage = gameStage.PLAY;
-                creatingStage = creationStage.HERO_TYPE;
+                if (errors.size() !=0)
+                    currentStage = gameStage.ERRORS;
+                else
+                {
+                    createVillains();
+                    updateMap();
+                    currentStage = gameStage.PLAY;
+                    creatingStage = creationStage.HERO_TYPE;
+                }
             }
         }
     }
@@ -297,7 +302,6 @@ public class GameController
 
     public void receiveUserInput(String input)
     {
-
         switch (currentStage)
         {
             case START:
@@ -310,7 +314,7 @@ public class GameController
                 break;
             case CREATION:
                 if (display instanceof consoleDisplay)
-                    consoleCustomHero(input);
+                    consoleCustomHero(input);//todo needs an else for guiDisplay. also don't forget the error stuff
                 break;
             case SELECTION:
                 if (input.equals("q"))
@@ -319,10 +323,14 @@ public class GameController
                 {
                     retrieveHeroes();
                     retrieveHero(Integer.parseInt(input));
+                    //todo before we create the villains check errors;
                     createVillains();
                     updateMap();
                     currentStage = gameStage.PLAY;
                 }
+                break;
+            case ERRORS:
+                //todo
                 break;
             case PLAY:
                 if (isMoveInput(input))
@@ -332,17 +340,21 @@ public class GameController
                     if (enemyEncountered())
                         currentStage = gameStage.RUN_FIGHT;
                     checkPlayerWon();
-                    //display.displayPlayView();
                     if (heroWon)
                         currentStage = gameStage.GAMEOVER;
                 }
                 else
                     processOption(input);
                 break;
-            case GAMEOVER:
-
+            case RUN_FIGHT:
+                //todo
                 break;
-
+            case GAMEOVER:
+                //todo
+                break;
+            case QUIT:
+                //todo
+                break;
             default:
                 gameContinues = false;
                 break;
@@ -373,6 +385,9 @@ public class GameController
             case SELECTION:
                 display.displayPlayerSelectionView(heroes);
                 break;
+            case ERRORS:
+                display.displayErrors(errors);
+                break;
             case PLAY:
                 display.displayPlayView();
                 break;
@@ -401,7 +416,6 @@ public class GameController
         heroes = dbController.getPlayers();
     }
 
-
     private void retrieveHero(int id)
     {
         for (Player player : heroes)
@@ -412,6 +426,8 @@ public class GameController
                 break;
             }
         }
+        if (hero == null)
+            errors.add("Error : Invalid id supplied.");
     }
 
     private void pickUpArtefact()

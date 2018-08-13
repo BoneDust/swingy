@@ -30,7 +30,7 @@ public class Player
     protected int id;
 
     @NotNull
-    @Size(min = 4, max = 15, message = "The length of a player's name must be between 4 and 15.")
+    @Size(min = 1, max = 15, message = "The length of a player's name must be between 1 and 15.")
     protected String name;
 
     @NotNull

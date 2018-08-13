@@ -17,7 +17,6 @@ public class consoleDisplay implements IDisplay
         stdin = new Scanner(System.in);
     }
 
-
     public void closeInputStream()
     {
         stdin.close();
@@ -63,12 +62,12 @@ public class consoleDisplay implements IDisplay
     public void displayPlayerSelectionView(ArrayList<Player> heroes)
     {
         String input = "";
-        while (!(input.matches("\\d+$") || input.equals("q")))
+        while (!(input.matches("\\d+$") || input.equals("q") || input.equals("b")))
         {
             clearScreen();
             System.out.print(
                     "\n********************************************************************************************\n" +
-                    "                                                                                           *\n" +
+                    "*                                                                                          *\n" +
                     "*                                   Select a saved hero                                    *\n" +
                     "*                                                                                          *\n"
             );
@@ -76,22 +75,22 @@ public class consoleDisplay implements IDisplay
             for(Player player : heroes)
             {
                 index++;
-                String line = String.format("*\tId: %d, Name: %s , Class: %s , Level: %d, ATK: %d, DEF: %d, HP: %d*\n",
+                String line = String.format("\tId: %d, Name: %s , Class: %s , Level: %d, ATK: %d, DEF: %d, HP: %d\n",
                         index, player.getName(), player.getType(),player.getAtk(),player.getDef(),player.getHp()
                         );
                 System.out.print(line);
             }
             System.out.print(
-                    "* q - Quit                                                                                 *\n" +
-                    "\n*                                                                                          *\n"+
+                    "*  q - Quit                                                                                 *\n" +
+                    "*  b - Back                                                                                 *\n" +
+                    "*                                                                                           *\n" +
                     "********************************************************************************************\n" +
                     "Select by Id: ");
-
             if (stdin.hasNext())
                 input = stdin.next();
             else
                 System.exit(0);
-            if (!(input.matches("\\d+$") || input.equals("q")))
+            if (!(input.matches("\\d+$") || input.equals("q") || input.equals("b")))
             {
                 System.out.println("Invalid choice. Enter a number representing a hero");
                 try{Thread.sleep(1000);} catch (InterruptedException ex) {ex.printStackTrace();}
@@ -230,10 +229,10 @@ public class consoleDisplay implements IDisplay
         while (stdin.hasNextLine())
         {
           //  clearScreen();
-            System.out.print(
+            System.out.println(
                          "\n********************************************************************\n" +
                             "*                                                                 *\n" +
-                            "*                   Invalid hero parameters detected!             *\n" +
+                            "*                        Invalid hero detected!                   *\n" +
                             "*                                                                 *\n" +
                             "*******************************************************************\n"
             );
@@ -253,77 +252,24 @@ public class consoleDisplay implements IDisplay
             }
         }
         controller.receiveUserInput(input);
-        // todo possibly displayHeroType();
     }
 
     public void displayBattleReport(String report)
     {
-        Scanner stdin = new Scanner(System.in);
-        String input = "";
-        while (stdin.hasNextLine())
-        {
-         //   clearScreen();
-            System.out.print(
-                          "\n*******************************************************************\n" +
-                            "*                                                                 *\n" +
-                            "*                            Battle Report!                       *\n" +
-                            "*                                                                 *\n" +
-                            "*******************************************************************\n"
-            );
-            System.out.println(report);
-            System.out.print("\nc - continue game\n\nChoice: ");
-            input = stdin.nextLine();
-            if (input.equals("c"))
-                break;
-            else
-            {
-                System.out.println("Invalid choice. Enter c to go back.");
-                try { Thread.sleep(3000); } catch (InterruptedException ex) { ex.printStackTrace();}
-            }
-        }
-        controller.receiveUserInput(input);
-        //todo possibly displayPlayView();
-    }
-
-    public void displayHeroStats(Player hero)
-    {
-        Scanner stdin = new Scanner(System.in);
-        String input = "";
-        while (stdin.hasNextLine())
-        {
-         //   clearScreen();
-            System.out.print(
-                  "\n*******************************************************************\n" +
-                    "*                                                                 *\n" +
-                    "*                              Hero Stats                         *\n" +
-                    "*                                                                 *\n" +
-                    "*******************************************************************\n"
-            );
-            System.out.println("Name: " + hero.getName());
-            System.out.println("Type: " + hero.getType());
-            System.out.println("Level: " + hero.getLevel());
-            System.out.println("Experience: " + hero.getExp());
-            System.out.println("Attack points: " + hero.getAtk());
-            System.out.println("Defense points: " + hero.getDef());
-            System.out.println("Hp Points: " + hero.getHp());
-            System.out.print("r - Resume game.\n\nChoice: ");
-            if (input.equals("r"))
-                break;
-            else
-            {
-                System.out.println("Invalid choice. Enter r to resume.");
-                try { Thread.sleep(3000); } catch (InterruptedException ex) { ex.printStackTrace();}
-            }
-        }
-        controller.receiveUserInput(input);
-       //todo displayPlayView();
+        System.out.println(
+            "\n*******************************************************************\n" +
+            "*                                                                 *\n" +
+            "*                            Battle Report!                       *\n" +
+            "*                                                                 *\n" +
+            "*******************************************************************\n");
+        System.out.println(report);
     }
 
     public void displayGameOver(boolean heroWon)
     {
         String status = heroWon ? "won!" : "lost!";
         String input="";
-        while (stdin.hasNext())
+        while (!(input.equals("1") || input.equals("2")))
         {
             System.out.print(
                 "\n*************************\n" +
@@ -335,13 +281,14 @@ public class consoleDisplay implements IDisplay
                         "*                       *\n" +
                         "*************************\n"
             );
-            input =  stdin.next();
-            if (input.equals("1") || input.equals("2"))
-                break;
+            if (stdin.hasNext())
+                input =  stdin.next();
             else
+                System.exit(0);
+            if (!(input.equals("1") || input.equals("2")))
             {
                 System.out.println("Invalid choice.");
-                try { Thread.sleep(3000);} catch (InterruptedException ex) {ex.printStackTrace();}
+                try { Thread.sleep(1000);} catch (InterruptedException ex) {ex.printStackTrace();}
             }
         }
         controller.receiveUserInput(input);
@@ -350,9 +297,9 @@ public class consoleDisplay implements IDisplay
     public void displayQuitDialogue()
     {
         String input="";
-        while (stdin.hasNextLine())
+        while (!(input.equals("1") || input.equals("2")))
         {
-        //    clearScreen();
+            clearScreen();
             System.out.print(
                     "\n****************************************\n" +
                             "*                                      *\n" +
@@ -364,13 +311,14 @@ public class consoleDisplay implements IDisplay
                             "****************************************\n" +
                             "Choice: "
              );
-            input =  stdin.nextLine();
-            if (input.equals("1") || input.equals("2"))
-                break;
+            if (stdin.hasNext())
+                input =  stdin.next();
             else
+                System.exit(0);
+            if (!(input.equals("1") || input.equals("2")))
             {
                 System.out.println("Invalid choice. Enter 1 or 2.");
-                try { Thread.sleep(3000);} catch (InterruptedException ex) {ex.printStackTrace();}
+                try { Thread.sleep(1000);} catch (InterruptedException ex) {ex.printStackTrace();}
             }
         }
         controller.receiveUserInput(input);

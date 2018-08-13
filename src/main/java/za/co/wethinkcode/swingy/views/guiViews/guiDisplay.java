@@ -30,11 +30,16 @@ public class guiDisplay implements IDisplay
 
 
 
+
     public void displayMap(final Map map){}
+
     public void displayFightOrRunPrompt(){}
+
     public void displayBattleReport(String report){}
-    public void displayHeroStats(Player hero){}
+
     public void displayErrors(ArrayList<String> errors){}
+
     public void displayGameOver(boolean heroWon){}
+
     public void displayQuitDialogue(){}
 }

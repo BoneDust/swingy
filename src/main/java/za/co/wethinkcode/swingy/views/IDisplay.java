@@ -10,7 +10,6 @@ public interface IDisplay
     public abstract void displayPlayerSelectionView(ArrayList<Player> heroes);
     public abstract void displayCreatePlayerView();
     public abstract void displayBattleReport(String report);
-    public abstract void displayHeroStats(Player hero);
     public abstract void displayErrors(ArrayList<String> errors);
     public abstract void displayGameOver(boolean heroWon);
     public abstract void displayQuitDialogue();
