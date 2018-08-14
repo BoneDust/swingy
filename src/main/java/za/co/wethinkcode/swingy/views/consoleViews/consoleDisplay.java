@@ -419,7 +419,7 @@ public class consoleDisplay implements IDisplay
         while (!(input.equals("w") || input.equals("a") || input.equals("s") || input.equals("d") || input.equals("q") ||
                 input.equals("x") || input.equals("h")))
         {
-            clearScreen();
+            //clearScreen();
             displayMap(controller.getMap());
             displayOptions();
             if (stdin.hasNext())

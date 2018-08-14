@@ -238,7 +238,7 @@ public class GameController
         Random rand = new Random();
         String report = hero.getName() + "(" + hero.getType() + ")  vs " + villain.getName() + "(" +
                         villain.getCatchPhrase() +")\n\n";
-        while (hero.getHp() != 0 && villain.getHp() != 0)
+        while (hero.getHp() > 0 && villain.getHp() > 0)
         {
             int heroAction = rand.nextInt(2), villainAction = rand.nextInt(2);
             if (heroAction == 1 && villainAction == 1)
@@ -261,7 +261,7 @@ public class GameController
                 hero.setHp(hero.getHp() - damageTaken);
             }
         }
-        if (hero.getHp() != 0)
+        if (hero.getHp() > 0)
         {
             report += "\n You won the battle!!!\n";
             hero.setExp(hero.getExp() + (10 * villain.getLevel()));
