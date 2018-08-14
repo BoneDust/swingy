@@ -20,9 +20,9 @@ import java.util.Random;
 
 public class GameController
 {
-    private enum gameStage{START, SELECTION, CREATION, ERRORS, PLAY, RUN_FIGHT, FORCED_FIGHT, GAMEOVER, QUIT};
+    private enum gameStage{START, SELECTION, CREATION, ERRORS, PLAY, RUN_FIGHT, FORCED_FIGHT, GAME_OVER, QUIT};
     private enum creationStage{HERO_TYPE, NAME_PROMPT, CREATION_TYPE, STATS};
-    private gameStage currentStage;
+    private gameStage currentStage, prevStage;
     private DBController dbController;
     private creationStage creatingStage;
     private Coordinates posBeforeBattle;
@@ -42,8 +42,13 @@ public class GameController
     {
         if (view.equals("console"))
             display = new consoleDisplay(this);
-        else
+        else if (view.equals("gui"))
             display = new guiDisplay();
+        else
+        {
+            System.out.println("Incorrect view selected.");
+            System.exit(0);
+        }
         currentStage = gameStage.START;
         creatingStage = creationStage.HERO_TYPE;
         gameContinues = true;
@@ -112,6 +117,7 @@ public class GameController
         if (hero != null)
         {
             createMap(level);
+            updateMap();
             coordinates = CoordinateFactory.newCoordinates(map.getSize() / 2, map.getSize() / 2, map);
             hero.setCoordinates(coordinates);
         }
@@ -170,6 +176,7 @@ public class GameController
         if (hero != null)
         {
             createMap(hero.getLevel());
+            updateMap();
             hero.setCoordinates(CoordinateFactory.newCoordinates(map.getSize() / 2,map.getSize() / 2, map));
         }
     }
@@ -187,15 +194,26 @@ public class GameController
                                     two.getAtk());
             result += String.format("%s %s received %d damage points.\n", two.getType(), two.getName(),
                                     one.getAtk());
+
+            int oneHp = one.getHp() - two.getAtk();
+            int twoHp = two.getHp() - one.getAtk();
+
+            result += String.format("%s %s hp = %d; \n%s %s hp = %d \n", one.getType(), one.getName(), oneHp,
+                                    two.getType(), two.getName(), twoHp);
         }
         else
         {
+            int damageTaken = (one.getAtk() - two.getDef() > 0) ?  one.getAtk() - two.getDef() : 0;
             result = String.format("\n%s %s attacked %s %s with %d damage points.\n", one.getType(), one.getName(),
                     two.getType(), two.getName(), one.getAtk());
             result += String.format("%s %s defended %s %s with %d defense points.\n", two.getType(), two.getName(),
-                    one.getType(), one.getName(), two.getAtk());
-            result += String.format("%s %s received %d damage points.\n", two.getType(), two.getName(),
-                    one.getAtk() - two.getDef());
+                    one.getType(), one.getName(), two.getDef());
+            result += String.format("%s %s received %d damage points.\n", two.getType(), two.getName(), damageTaken);
+
+            int oneHp = one.getHp();
+            int twoHp = two.getHp() - damageTaken;
+            result += String.format("%s %s hp = %d; \n%s %s hp = %d \n", one.getType(), one.getName(), oneHp,
+                    two.getType(), two.getName(), twoHp);
         }
         return (result);
     }
@@ -231,13 +249,16 @@ public class GameController
             }
             else if (heroAction == 1 && villainAction == 0)
             {
+                int damageTaken = (hero.getAtk() - villain.getDef() > 0) ?  hero.getAtk() - villain.getDef() : 0;
                 report += roundResults(hero, villain, false);
-                villain.setHp(villain.getHp() - hero.getAtk());
+
+                villain.setHp(villain.getHp() - damageTaken);
             }
             else if (heroAction == 0 && villainAction == 1)
             {
+                int damageTaken = (villain.getAtk() - hero.getDef() > 0) ?  villain.getAtk() - hero.getDef() : 0;
                 report += roundResults(villain, hero,false);
-                hero.setHp(hero.getHp() - villain.getAtk());
+                hero.setHp(hero.getHp() - damageTaken);
             }
         }
         if (hero.getHp() != 0)
@@ -245,14 +266,14 @@ public class GameController
             report += "\n You won the battle!!!\n";
             hero.setExp(hero.getExp() + (10 * villain.getLevel()));
             levelUp();
-            pickUpArtefact();
+            report += pickUpArtefact();
             villains.remove(villain);
             currentStage = gameStage.PLAY;
         }
         else
         {
             report += "\n You lost The battle!!!\n";
-            currentStage = gameStage.GAMEOVER;
+            currentStage = gameStage.GAME_OVER;
         }
         return (report);
     }
@@ -333,7 +354,9 @@ public class GameController
                 break;
             case SELECTION:
                 if (input.equals("q"))
-                     System.exit(1);
+                    System.exit(1);
+                else if  (input.equals("b"))
+                    currentStage = gameStage.START;
                 else
                 {
                     retrieveHeroes();
@@ -365,7 +388,7 @@ public class GameController
                     {
                         checkPlayerWon();
                         if (heroWon)
-                            currentStage = gameStage.GAMEOVER;
+                            currentStage = gameStage.GAME_OVER;
                     }
                 }
                 else
@@ -389,17 +412,16 @@ public class GameController
                         currentStage = gameStage.PLAY;
                     }
                 }
-
                 break;
             case FORCED_FIGHT:
                 battleReport = simulateFight(enemy);
                 display.displayBattleReport(battleReport);
                 break;
-            case GAMEOVER:
-
+            case GAME_OVER:
+                //todo
                 break;
             case QUIT:
-
+                //todo
                 break;
             default:
                 gameContinues = false;
@@ -412,7 +434,6 @@ public class GameController
         if (display instanceof consoleDisplay)
         {
             ((consoleDisplay)display).clearScreen();
-            ((consoleDisplay)display).closeInputStream();
             display = new guiDisplay();
         }
         else
@@ -444,7 +465,7 @@ public class GameController
             case FORCED_FIGHT:
                 display.displayForcedFightNotice();
                 break;
-            case GAMEOVER:
+            case GAME_OVER:
                 display.displayGameOver(heroWon);
                 break;
             case  QUIT:
@@ -480,9 +501,10 @@ public class GameController
             errors.add("Error : Invalid id supplied.");
     }
 
-    private void pickUpArtefact()
+    private String pickUpArtefact()
     {
         Random rand = new Random();
+        String pickedArtefact = "";
         int chances = rand.nextInt(10);
         if (chances >= 7)
         {
@@ -491,12 +513,22 @@ public class GameController
             int value = rand.nextInt(100 - 50 + 1) + 50;
             Artefact  artefact = ArtefactFactory.newArtefact(value, types[index]);
             if (index == 0)
+            {
+                pickedArtefact = "\nYou picked up a weapon which deals "+ value +" damage points\n";
                 hero.setAtk(hero.getAtk() + value);
+            }
             else if (index == 1)
-                hero.setDef(hero.getAtk() + value);
+            {
+                pickedArtefact = "\nYou picked up an armor which has "+ value +" defense points\n";
+                hero.setDef(hero.getDef() + value);
+            }
             else
+            {
+                pickedArtefact = "\nYou picked up a helm which adds "+ value +" health points\n";
                 hero.setHp(hero.getHp() + value);
+            }
             hero.getArtefacts().add(artefact);
         }
+        return (pickedArtefact);
     }
 }

@@ -17,11 +17,6 @@ public class consoleDisplay implements IDisplay
         stdin = new Scanner(System.in);
     }
 
-    public void closeInputStream()
-    {
-        stdin.close();
-    }
-
     public void clearScreen()
     {
         System.out.print("\033[H\033[2J");
@@ -242,11 +237,7 @@ public class consoleDisplay implements IDisplay
             if (!input.equals("b"))
             {
                 System.out.println("Invalid choice. Enter b to go back.");
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
+                try {Thread.sleep(1000); } catch (InterruptedException ex) {ex.printStackTrace(); }
             }
         }
         controller.receiveUserInput(input);
@@ -387,11 +378,7 @@ public class consoleDisplay implements IDisplay
             if (!(input.equals("1") || input.equals("2")))
             {
                 System.out.println("Invalid input. Enter either 1 or 2.");
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
+                try {Thread.sleep(1000);} catch (InterruptedException ex) {ex.printStackTrace(); }
             }
         }
         controller.receiveUserInput(input);
@@ -419,15 +406,10 @@ public class consoleDisplay implements IDisplay
             if (!input.equals("c"))
             {
                 System.out.println("Invalid input. Enter c to continue.");
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
+                try {Thread.sleep(1000);} catch (InterruptedException ex) {ex.printStackTrace();}
             }
         }
         controller.receiveUserInput(input);
-
     }
 
     public void displayPlayView()
