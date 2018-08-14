@@ -20,13 +20,14 @@ import java.util.Random;
 
 public class GameController
 {
-    private enum gameStage{START, SELECTION, CREATION, ERRORS, PLAY, RUN_FIGHT, GAMEOVER, QUIT};
+    private enum gameStage{START, SELECTION, CREATION, ERRORS, PLAY, RUN_FIGHT, FORCED_FIGHT, GAMEOVER, QUIT};
     private enum creationStage{HERO_TYPE, NAME_PROMPT, CREATION_TYPE, STATS};
     private gameStage currentStage;
     private DBController dbController;
     private creationStage creatingStage;
     private Coordinates posBeforeBattle;
     private Player hero;
+    private Villain enemy;
     private ArrayList<Player> heroes;
     private ArrayList<Villain> villains;
     private ArrayList<String> errors;
@@ -51,9 +52,10 @@ public class GameController
         villains = new ArrayList<>();
         errors = new ArrayList<>();
         map = null;
+        posBeforeBattle = new Coordinates(0,0);
         dbController = new DBController(this);
-        dbController.createDB();
-        dbController.initDB();
+       // dbController.createDB();
+        //dbController.initDB();
     }
 
     public boolean isGameContinues()
@@ -105,12 +107,17 @@ public class GameController
     {
         int exp = (int)(level*1000 + (Math.pow(level - 1, 2) *450));
         PlayerFactory.setId(PlayerFactory.getId()+ 1);
-        createMap(level);
-        Coordinates coordinates = CoordinateFactory.newCoordinates(map.getSize() / 2,map.getSize() / 2, map);
+        Coordinates coordinates = CoordinateFactory.newCoordinates(0, 0, map);
         hero = PlayerFactory.customPlayer(PlayerFactory.getId(), name, type, level, exp, atk, def, hp, coordinates, this);
+        if (hero != null)
+        {
+            createMap(level);
+            coordinates = CoordinateFactory.newCoordinates(map.getSize() / 2, map.getSize() / 2, map);
+            hero.setCoordinates(coordinates);
+        }
     }
 
-    public void consoleCustomHero(String input)
+    public void consoleHeroCreation(String input)
     {
         while (currentStage == gameStage.CREATION)
         {
@@ -143,7 +150,7 @@ public class GameController
                     ((consoleDisplay)display).displayHeroStatsPrompt(name, type);
                 else
                     this.createDefaultHero(type, name);
-                if (errors.size() !=0)
+                if (errors.size() != 0)
                     currentStage = gameStage.ERRORS;
                 else
                 {
@@ -160,8 +167,11 @@ public class GameController
     {
         Coordinates coordinates = CoordinateFactory.newCoordinates(0,0, map);
         hero = PlayerFactory.defaultPlayer(name, type, coordinates, this);
-        createMap(hero.getLevel());
-        hero.setCoordinates(CoordinateFactory.newCoordinates(map.getSize() / 2,map.getSize() / 2, map));
+        if (hero != null)
+        {
+            createMap(hero.getLevel());
+            hero.setCoordinates(CoordinateFactory.newCoordinates(map.getSize() / 2,map.getSize() / 2, map));
+        }
     }
 
     private String roundResults(Player one, Player two, boolean bothAttack)
@@ -197,7 +207,10 @@ public class GameController
             if (villain.getCoordinates().getX() == hero.getCoordinates().getX() &&
                 villain.getCoordinates().getY() == hero.getCoordinates().getY()
             )
+            {
+                enemy = villain;
                 return (true);
+            }
         }
         return (false);
     }
@@ -229,15 +242,16 @@ public class GameController
         }
         if (hero.getHp() != 0)
         {
-            report += "\n You won the fight!!!\n";
+            report += "\n You won the battle!!!\n";
             hero.setExp(hero.getExp() + (10 * villain.getLevel()));
             levelUp();
             pickUpArtefact();
             villains.remove(villain);
+            currentStage = gameStage.PLAY;
         }
         else
         {
-            report += "\n You lost!!!\n";
+            report += "\n You lost The battle!!!\n";
             currentStage = gameStage.GAMEOVER;
         }
         return (report);
@@ -262,7 +276,8 @@ public class GameController
 
     private void movePlayer(String direction)
     {
-        posBeforeBattle = hero.getCoordinates();
+        posBeforeBattle.setX(hero.getCoordinates().getX());
+        posBeforeBattle.setY(hero.getCoordinates().getY());
         if (direction.equals("w"))
             hero.getCoordinates().setY(hero.getCoordinates().getY() - 1);
         else if (direction.equals("a"))
@@ -314,7 +329,7 @@ public class GameController
                 break;
             case CREATION:
                 if (display instanceof consoleDisplay)
-                    consoleCustomHero(input);//todo needs an else for guiDisplay. also don't forget the error stuff
+                    consoleHeroCreation(input);//todo needs an else for guiDisplay.
                 break;
             case SELECTION:
                 if (input.equals("q"))
@@ -323,37 +338,68 @@ public class GameController
                 {
                     retrieveHeroes();
                     retrieveHero(Integer.parseInt(input));
-                    //todo before we create the villains check errors;
-                    createVillains();
-                    updateMap();
-                    currentStage = gameStage.PLAY;
+                    if (errors.size() != 0)
+                        currentStage = gameStage.ERRORS;
+                    else
+                    {
+                        createVillains();
+                        updateMap();
+                        currentStage = gameStage.PLAY;
+                    }
                 }
                 break;
             case ERRORS:
-                //todo
+                errors = new ArrayList<>();
+                creatingStage = creationStage.HERO_TYPE;
+                currentStage = gameStage.START;
                 break;
             case PLAY:
                 if (isMoveInput(input))
                 {
                     movePlayer(input);
                     updateMap();
+                    display.displayMap(map);
                     if (enemyEncountered())
                         currentStage = gameStage.RUN_FIGHT;
-                    checkPlayerWon();
-                    if (heroWon)
-                        currentStage = gameStage.GAMEOVER;
+                    else
+                    {
+                        checkPlayerWon();
+                        if (heroWon)
+                            currentStage = gameStage.GAMEOVER;
+                    }
                 }
                 else
                     processOption(input);
                 break;
             case RUN_FIGHT:
-                //todo
+                if (input.equals("1"))
+                {
+                    battleReport = simulateFight(enemy);
+                    display.displayBattleReport(battleReport);
+                }
+                else
+                {
+                    if (forcedFight())
+                        currentStage = gameStage.FORCED_FIGHT;
+                    else
+                    {
+                        hero.getCoordinates().setX(posBeforeBattle.getX());
+                        hero.getCoordinates().setY(posBeforeBattle.getY());
+                        updateMap();
+                        currentStage = gameStage.PLAY;
+                    }
+                }
+
+                break;
+            case FORCED_FIGHT:
+                battleReport = simulateFight(enemy);
+                display.displayBattleReport(battleReport);
                 break;
             case GAMEOVER:
-                //todo
+
                 break;
             case QUIT:
-                //todo
+
                 break;
             default:
                 gameContinues = false;
@@ -365,6 +411,7 @@ public class GameController
     {
         if (display instanceof consoleDisplay)
         {
+            ((consoleDisplay)display).clearScreen();
             ((consoleDisplay)display).closeInputStream();
             display = new guiDisplay();
         }
@@ -393,6 +440,9 @@ public class GameController
                 break;
             case RUN_FIGHT:
                 display.displayFightOrRunPrompt();
+                break;
+            case FORCED_FIGHT:
+                display.displayForcedFightNotice();
                 break;
             case GAMEOVER:
                 display.displayGameOver(heroWon);

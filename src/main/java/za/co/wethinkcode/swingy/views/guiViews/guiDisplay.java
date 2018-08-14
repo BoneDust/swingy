@@ -42,4 +42,6 @@ public class guiDisplay implements IDisplay
     public void displayGameOver(boolean heroWon){}
 
     public void displayQuitDialogue(){}
+
+    public void displayForcedFightNotice(){}
 }

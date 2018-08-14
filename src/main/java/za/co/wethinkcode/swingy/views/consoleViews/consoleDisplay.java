@@ -184,7 +184,7 @@ public class consoleDisplay implements IDisplay
     private int retrieveStat(String stat)
     {
         String value = "";
-        while (!value.matches("\\d+$"))
+        while (!value.matches("-?\\d+$"))
         {
             clearScreen();
             System.out.print(
@@ -199,7 +199,7 @@ public class consoleDisplay implements IDisplay
                 value = stdin.next();
             else
                 System.exit(0);
-            if(!value.matches("\\d+$"))
+            if(!value.matches("-?\\d+$"))
             {
                 System.out.println("\nInvalid " + stat +". Please enter a number.");
                 try { Thread.sleep(1000);} catch (InterruptedException ex) {ex.printStackTrace();}
@@ -211,24 +211,20 @@ public class consoleDisplay implements IDisplay
     public void displayHeroStatsPrompt(String name, String type)
     {
         int level, atk, def, hp;
-        do
-        {
-            level = retrieveStat("Level");
-            atk = retrieveStat("Atk");
-            def = retrieveStat("Def");
-            hp = retrieveStat("Hp");
-            controller.createCustomHero(type, name,level, atk, def, hp);
-        }
-        while (controller.getHero() == null);
+
+        level = retrieveStat("Level");
+        atk = retrieveStat("Atk");
+        def = retrieveStat("Def");
+        hp = retrieveStat("Hp");
+        controller.createCustomHero(type, name,level, atk, def, hp);
     }
 
     public void displayErrors(ArrayList<String> errors)
     {
-        Scanner stdin = new Scanner(System.in);
         String input = "";
-        while (stdin.hasNextLine())
+        while (!input.equals("b"))
         {
-          //  clearScreen();
+            clearScreen();
             System.out.println(
                          "\n********************************************************************\n" +
                             "*                                                                 *\n" +
@@ -238,14 +234,16 @@ public class consoleDisplay implements IDisplay
             );
             for (String error : errors)
                 System.out.println("\t" + error);
-            System.out.print("b - Back\n\nChoice: ");
-            input = stdin.nextLine();
-            if (input.equals("b"))
-                break;
-            else {
+            System.out.print("\nb - Back\n\nChoice: ");
+            if (stdin.hasNext())
+                input = stdin.next();
+            else
+                System.exit(0);
+            if (!input.equals("b"))
+            {
                 System.out.println("Invalid choice. Enter b to go back.");
                 try {
-                    Thread.sleep(3000);
+                    Thread.sleep(1000);
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }
@@ -384,17 +382,52 @@ public class consoleDisplay implements IDisplay
             );
             if (stdin.hasNext())
                 input = stdin.next();
+            else
+                System.exit(0);
             if (!(input.equals("1") || input.equals("2")))
             {
                 System.out.println("Invalid input. Enter either 1 or 2.");
                 try {
-                    Thread.sleep(3000);
+                    Thread.sleep(1000);
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }
             }
         }
         controller.receiveUserInput(input);
+    }
+
+    public void displayForcedFightNotice()
+    {
+        String input = "";
+
+        while (!input.equals("c"))
+        {
+            System.out.print(
+                    "\n*******************************************************************\n" +
+                            "*                                                                 *\n" +
+                            "*                      You are forced to battle!                  *\n" +
+                            "*                                                                 *\n" +
+                            "*    c - continue to do battle                                    *\n" +
+                            "*                                                                 *\n" +
+                            "*******************************************************************\n");
+
+            if (stdin.hasNext())
+                input = stdin.next();
+            else
+                System.exit(0);
+            if (!input.equals("c"))
+            {
+                System.out.println("Invalid input. Enter c to continue.");
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        controller.receiveUserInput(input);
+
     }
 
     public void displayPlayView()

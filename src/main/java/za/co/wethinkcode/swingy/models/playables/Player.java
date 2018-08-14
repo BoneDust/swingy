@@ -39,6 +39,7 @@ public class Player
 
     @NotNull
     @Min(value = 0, message = "Player level cannot be lower than 0.")
+    @Max(value = 10, message = "Player level cannot exceed 10.")
     protected int level;
 
     @NotNull

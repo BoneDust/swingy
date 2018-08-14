@@ -15,5 +15,6 @@ public interface IDisplay
     public abstract void displayQuitDialogue();
     public abstract void displayMap(final Map map);
     public abstract void displayFightOrRunPrompt();
+    public abstract void displayForcedFightNotice();
     public abstract void displayPlayView();
 }
