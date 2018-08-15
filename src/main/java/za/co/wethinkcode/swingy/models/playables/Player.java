@@ -38,8 +38,8 @@ public class Player
     protected String type;
 
     @NotNull
-    @Min(value = 0, message = "Player level cannot be lower than 0.")
-    @Max(value = 10, message = "Player level cannot exceed 10.")
+    @Min(value = 1, message = "Player level cannot be lower than 1.")
+    @Max(value = 7, message = "Player level cannot exceed 7.")
     protected int level;
 
     @NotNull

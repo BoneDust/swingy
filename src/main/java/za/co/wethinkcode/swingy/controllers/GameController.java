@@ -238,6 +238,9 @@ public class GameController
         Random rand = new Random();
         String report = hero.getName() + "(" + hero.getType() + ")  vs " + villain.getName() + "(" +
                         villain.getCatchPhrase() +")\n\n";
+        report += hero.getName() +" initial hp : " + hero.getHp() +"\n";
+        report += villain.getName() +" initial hp : " + villain.getHp() +"\n";
+
         while (hero.getHp() > 0 && villain.getHp() > 0)
         {
             int heroAction = rand.nextInt(2), villainAction = rand.nextInt(2);
@@ -265,7 +268,7 @@ public class GameController
         {
             report += "\n You won the battle!!!\n";
             hero.setExp(hero.getExp() + (10 * villain.getLevel()));
-            levelUp();
+            report += levelUp();
             report += pickUpArtefact();
             villains.remove(villain);
             currentStage = gameStage.PLAY;
@@ -280,7 +283,7 @@ public class GameController
 
     private void checkPlayerWon()
     {
-        if (hero.getLevel() >=10)
+        if (hero.getLevel() >7)
             heroWon = true;
         if (hero.getCoordinates().getX() == 0 || hero.getCoordinates().getY() == 0)
             heroWon = true;
@@ -317,8 +320,9 @@ public class GameController
             switchDisplays();
     }
 
-    private void levelUp()
+    private String levelUp()
     {
+        String leveled = "";
         int incr = 0, tmpExp = 0;
         do
         {
@@ -326,7 +330,10 @@ public class GameController
             incr++;
         }
         while (tmpExp < hero.getExp());
+        if (hero.getLevel() + incr - 1 > hero.getLevel())
+            leveled = "\nYou leveled up\n";
         hero.setLevel(hero.getLevel() + incr - 1);
+        return (leveled);
     }
 
     private boolean forcedFight()
@@ -418,10 +425,20 @@ public class GameController
                 display.displayBattleReport(battleReport);
                 break;
             case GAME_OVER:
-                //todo
+                if (input.equals("1"))
+                    currentStage = gameStage.START;
+                else
+                    gameContinues = false;
+                //saveHero();
                 break;
             case QUIT:
-                //todo
+                if (input.equals("1"))
+                {
+                 //   saveHero();
+                    gameContinues = false;
+                }
+                else if (input.equals("2"))
+                    currentStage = gameStage.PLAY;
                 break;
             default:
                 gameContinues = false;
@@ -470,6 +487,7 @@ public class GameController
                 break;
             case  QUIT:
                 display.displayQuitDialogue();
+                break;
             default:
                 gameContinues = false;
                 break;
