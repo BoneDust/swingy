@@ -17,4 +17,5 @@ public interface IDisplay
     public abstract void displayFightOrRunPrompt();
     public abstract void displayForcedFightNotice();
     public abstract void displayPlayView();
+    public abstract void displayRenderGame();
 }

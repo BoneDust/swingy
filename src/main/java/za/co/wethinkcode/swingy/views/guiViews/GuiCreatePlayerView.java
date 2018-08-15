@@ -5,9 +5,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 
-public class guiCreatePlayerView
+public class GuiCreatePlayerView
 {
     private static JFrame frame;
     private static JButton btnContinue;
@@ -70,7 +69,7 @@ public class guiCreatePlayerView
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                guiPlayView.displayPlayView();
+                GuiPlayView.displayPlayView();
                 frame.dispose();
             }
         });
@@ -80,7 +79,7 @@ public class guiCreatePlayerView
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                guiStartView.displayStartView();
+                GuiStartView.displayStartView();
                 frame.setVisible(false);
             }
         });

@@ -268,7 +268,8 @@ public class consoleDisplay implements IDisplay
                         "* 1. Back to Main Menu  *\n" +
                         "* 2. Quit               *\n" +
                         "*                       *\n" +
-                        "*************************\n"
+                        "*************************\n" +
+                        "Choice: "
             );
             if (stdin.hasNext())
                 input =  stdin.next();
@@ -434,5 +435,11 @@ public class consoleDisplay implements IDisplay
             }
         }
         controller.receiveUserInput(input);
+    }
+
+    public void displayRenderGame()
+    {
+        while (controller.isGameContinues())
+            controller.displayStage();
     }
 }

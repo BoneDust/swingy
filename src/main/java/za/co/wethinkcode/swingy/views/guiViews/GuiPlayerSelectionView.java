@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 @Getter
-public class guiPlayerSelectionView
+public class GuiPlayerSelectionView
 {
     private static JFrame frame;
     private static JButton btnContinue;
@@ -74,7 +74,7 @@ public class guiPlayerSelectionView
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                guiPlayView.displayPlayView();
+                GuiPlayView.displayPlayView();
                 frame.dispose();
             }
         });
@@ -84,7 +84,7 @@ public class guiPlayerSelectionView
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                guiStartView.displayStartView();
+                GuiStartView.displayStartView();
                 frame.setVisible(false);
             }
         });

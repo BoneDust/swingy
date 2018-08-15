@@ -10,7 +10,7 @@ import za.co.wethinkcode.swingy.models.playables.Player;
 import za.co.wethinkcode.swingy.models.playables.Villain;
 import za.co.wethinkcode.swingy.views.IDisplay;
 import za.co.wethinkcode.swingy.views.consoleViews.consoleDisplay;
-import za.co.wethinkcode.swingy.views.guiViews.guiDisplay;
+import za.co.wethinkcode.swingy.views.guiViews.GuiDisplay;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -22,7 +22,7 @@ public class GameController
 {
     private enum gameStage{START, SELECTION, CREATION, ERRORS, PLAY, RUN_FIGHT, FORCED_FIGHT, GAME_OVER, QUIT};
     private enum creationStage{HERO_TYPE, NAME_PROMPT, CREATION_TYPE, STATS};
-    private gameStage currentStage, prevStage;
+    private gameStage currentStage;
     private DBController dbController;
     private creationStage creatingStage;
     private Coordinates posBeforeBattle;
@@ -43,7 +43,7 @@ public class GameController
         if (view.equals("console"))
             display = new consoleDisplay(this);
         else if (view.equals("gui"))
-            display = new guiDisplay();
+            display = new GuiDisplay(this);
         else
         {
             System.out.println("Incorrect view selected.");
@@ -169,6 +169,11 @@ public class GameController
         }
     }
 
+    public void renderGame()
+    {
+        display.displayRenderGame();
+    }
+    
     public void createDefaultHero(String type, String name)
     {
         Coordinates coordinates = CoordinateFactory.newCoordinates(0,0, map);
@@ -267,10 +272,11 @@ public class GameController
         if (hero.getHp() > 0)
         {
             report += "\n You won the battle!!!\n";
-            hero.setExp(hero.getExp() + (10 * villain.getLevel()));
+            hero.setExp(hero.getExp() + (100 * villain.getLevel()));
             report += levelUp();
             report += pickUpArtefact();
-            villains.remove(villain);
+            if (villain.getHp() <= 0)
+                villains.remove(villain);
             currentStage = gameStage.PLAY;
         }
         else
@@ -323,16 +329,22 @@ public class GameController
     private String levelUp()
     {
         String leveled = "";
-        int incr = 0, tmpExp = 0;
-        do
+        int nextLevel = hero.getLevel() + 1;
+        int nextLevelExp = (int) ((nextLevel * 1000) + (Math.pow(nextLevel - 1, 2) * 450));
+        if (hero.getExp() >= nextLevelExp)
         {
-            tmpExp = (int) ((hero.getLevel() + incr) * 1000 + (Math.pow((hero.getLevel() + incr) - 1, 2) * 450));
-            incr++;
+            leveled = "\nYou leveled up!\n";
+            while (hero.getExp() > nextLevelExp)
+            {
+                nextLevel += 1;
+                nextLevelExp = (int) ((nextLevel * 1000) + (Math.pow(nextLevel - 1, 2) * 450));
+            }
+            if (nextLevelExp != hero.getExp())
+                nextLevel--;
+            hero.setLevel(nextLevel);
+            createMap(nextLevel);
+            updateMap();
         }
-        while (tmpExp < hero.getExp());
-        if (hero.getLevel() + incr - 1 > hero.getLevel())
-            leveled = "\nYou leveled up\n";
-        hero.setLevel(hero.getLevel() + incr - 1);
         return (leveled);
     }
 
@@ -341,6 +353,16 @@ public class GameController
         Random rand = new Random();
         int roll = rand.nextInt(2);
         return (roll == 1);
+    }
+
+
+    private void fight()
+    {
+        battleReport = simulateFight(enemy);
+        display.displayBattleReport(battleReport);
+        checkPlayerWon();
+        if (heroWon)
+            currentStage = gameStage.GAME_OVER;
     }
 
     public void receiveUserInput(String input)
@@ -357,7 +379,7 @@ public class GameController
                 break;
             case CREATION:
                 if (display instanceof consoleDisplay)
-                    consoleHeroCreation(input);//todo needs an else for guiDisplay.
+                    consoleHeroCreation(input);//todo needs an else for GuiDisplay.
                 break;
             case SELECTION:
                 if (input.equals("q"))
@@ -403,10 +425,7 @@ public class GameController
                 break;
             case RUN_FIGHT:
                 if (input.equals("1"))
-                {
-                    battleReport = simulateFight(enemy);
-                    display.displayBattleReport(battleReport);
-                }
+                    fight();
                 else
                 {
                     if (forcedFight())
@@ -421,8 +440,7 @@ public class GameController
                 }
                 break;
             case FORCED_FIGHT:
-                battleReport = simulateFight(enemy);
-                display.displayBattleReport(battleReport);
+                fight();
                 break;
             case GAME_OVER:
                 if (input.equals("1"))
@@ -451,13 +469,14 @@ public class GameController
         if (display instanceof consoleDisplay)
         {
             ((consoleDisplay)display).clearScreen();
-            display = new guiDisplay();
+            display = new GuiDisplay(this);
         }
         else
             display = new consoleDisplay(this);
+        renderGame();
     }
 
-    public void playGame()
+    public void displayStage()
     {
         switch (currentStage)
         {

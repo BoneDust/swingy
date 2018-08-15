@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 @Getter
-public class guiPlayView
+public class GuiPlayView
 {
     private static JFrame frame;
     private static JButton btnContinue, btnExit, btnNorth, btnSouth, btnWest, btnEast, btnSwitch;

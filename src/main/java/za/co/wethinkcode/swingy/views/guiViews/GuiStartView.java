@@ -1,7 +1,6 @@
 package za.co.wethinkcode.swingy.views.guiViews;
 
 import lombok.Getter;
-import lombok.Setter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 @Getter
-public class guiStartView
+public class GuiStartView
 {
     private static JFrame frame = new JFrame("Swingy");
     private static ButtonGroup btnGroup = new ButtonGroup();
@@ -47,12 +46,12 @@ public class guiStartView
             {
                 if (rbtnPreviousHero.isSelected())
                 {
-                    guiPlayerSelectionView.displaySelectionView();
+                    GuiPlayerSelectionView.displaySelectionView();
                     frame.dispose();
                 }
                 else
                 {
-                    guiCreatePlayerView.displayCreatePlayerView();
+                    GuiCreatePlayerView.displayCreatePlayerView();
                     frame.dispose();
                 }
             }
