@@ -24,11 +24,11 @@ public class Player
     @Valid
     protected ArrayList<Artefact> artefacts;
 
-    @NotNull
+  /*  @NotNull
     @Min(value = 0, message = "Player id must be greater than 0.")
     @Max(value = 2147483647, message = "Player id cannot exceed MAX_INT value.")
     protected int id;
-
+  */
     @NotNull
     @Size(min = 1, max = 15, message = "The length of a player's name must be between 1 and 15.")
     protected String name;
@@ -62,9 +62,8 @@ public class Player
     @Valid
     protected Coordinates coordinates;
 
-    public Player(int id, String name, String type, int level, int exp, int atk, int def, int hp, Coordinates coordinates)
+    public Player(String name, String type, int level, int exp, int atk, int def, int hp, Coordinates coordinates)
     {
-        this.setId(id);
         this.setName(name);
         this.setType(type);
         this.setLevel(level);

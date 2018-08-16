@@ -10,14 +10,14 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class KungFuMaster extends Player
 {
-    public KungFuMaster(int id, String name, String type, int level, int exp, int atk, int def, int hp,
+    public KungFuMaster(String name, String type, int level, int exp, int atk, int def, int hp,
                         Coordinates coordinates)
     {
-        super(id, name, type, level, exp, atk, def, hp, coordinates);
+        super(name, type, level, exp, atk, def, hp, coordinates);
     }
 
-    public KungFuMaster(int id, String name, Coordinates coordinates)
+    public KungFuMaster(String name, Coordinates coordinates)
     {
-        super(id, name, "KungFuMaster",1, 1000, 40, 25, 300, coordinates);
+        super(name, "KungFuMaster",1, 1000, 40, 25, 300, coordinates);
     }
 }

@@ -17,8 +17,8 @@ public class Villain extends Player
     @Size(min = 5, max = 50, message = "A villain's catchphrase must be  5-50 characters long.")
     private String catchPhrase;
 
-    public Villain(int id, String name, String type, int level, int exp, int atk, int def, int hp, Coordinates pos)
+    public Villain(String name, String type, int level, int exp, int atk, int def, int hp, Coordinates pos)
     {
-        super(id, name,type, level, exp, atk, def, hp, pos);
+        super(name,type, level, exp, atk, def, hp, pos);
     }
 }

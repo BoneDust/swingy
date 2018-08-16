@@ -15,18 +15,6 @@ import java.util.Set;
 @Getter
 public class PlayerFactory
 {
-    public static int id = 0;
-
-    public static int getId()
-    {
-        return (id);
-    }
-
-    public static void setId(int Id)
-    {
-        id = Id;
-    }
-
     private static Player validatePlayer(Player player, GameController controller)
     {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
@@ -42,17 +30,17 @@ public class PlayerFactory
         return (player);
     }
 
-    public static Player customPlayer(int id, String name, String type, int lvl, int exp, int atk, int def, int hp,
+    public static Player customPlayer(String name, String type, int lvl, int exp, int atk, int def, int hp,
                                    Coordinates coordinates, GameController controller)
     {
         Player player;
 
         if (type.equals("Gunman"))
-            player = new Gunman(id, name, type, lvl, exp, atk, def, hp, coordinates);
+            player = new Gunman(name, type, lvl, exp, atk, def, hp, coordinates);
         else if (type.equals("KungFuMaster"))
-            player = new KungFuMaster(id, name, type, lvl, exp, atk, def, hp, coordinates);
+            player = new KungFuMaster(name, type, lvl, exp, atk, def, hp, coordinates);
         else if (type.equals("Swordsman"))
-            player = new Swordsman(id, name, type, lvl, exp, atk, def, hp, coordinates);
+            player = new Swordsman(name, type, lvl, exp, atk, def, hp, coordinates);
         else
             player = null;
         return (validatePlayer(player, controller));
@@ -60,24 +48,13 @@ public class PlayerFactory
 
     public static Player defaultPlayer(String name, String type, Coordinates coordinates, GameController controller)
     {
-
         Player player;
         if (type.equals("Gunman"))
-        {
-            id++;
-            player = new Gunman(id, name, coordinates);
-        }
+            player = new Gunman(name, coordinates);
         else if (type.equals("KungFuMaster"))
-        {
-            id++;
-            player = new KungFuMaster(id, name, coordinates);
-
-        }
+            player = new KungFuMaster(name, coordinates);
         else if (type.equals("Swordsman"))
-        {
-            id++;
-            player = new Swordsman(id, name, coordinates);
-        }
+            player = new Swordsman(name, coordinates);
         else
             player = null;
         return (validatePlayer(player, controller));

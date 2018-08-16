@@ -62,8 +62,7 @@ public class GuiPlayView
         arenaPanel.setLayout(null);
         setColors();
         setBounds();
-       // if (initialised)
-            setListeners();
+        setListeners();
         addToPanel();
     }
 
@@ -118,9 +117,9 @@ public class GuiPlayView
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                frame.dispose();
-                initialised = false;
-                reDrawMap = true;
+                frame.setVisible(false);
+                //initialised = false;
+                //reDrawMap = true;
                 controller.receiveUserInput("x");
                // controller.displayStage();
             }
@@ -260,7 +259,7 @@ public class GuiPlayView
                     if (map.getGrid()[i][j] == 1)
                         item.setBackground(Color.GREEN);
                      else if (map.getGrid()[i][j] == 2)
-                       item.setBackground(Color.BLACK);
+                        item.setBackground(Color.BLACK);
                     else
                         item.setBackground(Color.LIGHT_GRAY);
                 }

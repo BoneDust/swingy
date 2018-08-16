@@ -11,15 +11,15 @@ import javax.validation.constraints.NotNull;
 public class Gunman extends Player
 {
 
-    public Gunman(int id, String name, String type, int level, int exp, int atk, int def, int hp,
+    public Gunman(String name, String type, int level, int exp, int atk, int def, int hp,
                   Coordinates coordinates)
     {
-        super(id, name,type, level, exp, atk, def, hp, coordinates);
+        super(name,type, level, exp, atk, def, hp, coordinates);
     }
 
-    public Gunman(int id, String name, Coordinates coordinates)
+    public Gunman(String name, Coordinates coordinates)
     {
-        super(id, name,"Gunman", 1, 1000, 80, 15, 350, coordinates);
+        super(name,"Gunman", 1, 1000, 80, 15, 350, coordinates);
     }
 
 }

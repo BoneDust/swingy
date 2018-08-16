@@ -57,7 +57,7 @@ public class GuiDisplay implements IDisplay
         playView.setReDrawMap(value);
     }
 
-    public void displayFightOrRunPrompt() //1 fight or 2 run
+    public void displayFightOrRunPrompt()
     {
         int dialogButton = JOptionPane.YES_NO_OPTION;
         int dialogResult = JOptionPane.showConfirmDialog (playView.getFrame(), "Do you want to do battle?","Enemy encountered",dialogButton);
@@ -105,7 +105,7 @@ public class GuiDisplay implements IDisplay
     public void displayForcedFightNotice()
     {
         String message = "You are forced to do battle";
-        JOptionPane.showMessageDialog(errorFrame, message);
+        JOptionPane.showMessageDialog(playView.getFrame(), message);
         controller.receiveUserInput("c");
         controller.displayStage();
     }

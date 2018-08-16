@@ -116,8 +116,11 @@ public class GuiPlayerSelectionView
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                frame.dispose();
                 controller.receiveUserInput(selectedHero);
+                if(controller.getHero() == null)
+                    ((GuiDisplay)controller.getDisplay()).setErrorFrame(frame);
+                else
+                    frame.dispose();
                 controller.displayStage();
             }
         });
@@ -139,32 +142,26 @@ public class GuiPlayerSelectionView
             public void actionPerformed(ActionEvent e)
             {
                 ArrayList<String> details = getAllHeroDetails(heroes);
-                Player player = heroes.get(cbOptions.getSelectedIndex());
                 info.setText(details.get(cbOptions.getSelectedIndex()));
-                selectedHero = Integer.toString(player.getId());
+                selectedHero = Integer.toString(cbOptions.getSelectedIndex() + 1);
             }
         });
     }
 
     public  void displaySelectionView(ArrayList<Player> heroes)
     {
-    //    if (frame == null)
-      //  {
-            initSelectionView(heroes);
-
-            frame.setContentPane(panel);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setLocationRelativeTo(null);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setPreferredSize(new Dimension(450, 500));
-            frame.setResizable(false);
-            frame.setLayout(null);
-            frame.pack();
-            frame.setVisible(true);
+        initSelectionView(heroes);
+        frame.setContentPane(panel);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setPreferredSize(new Dimension(450, 500));
+        frame.setResizable(false);
+        frame.setLayout(null);
+        frame.pack();
+        frame.setVisible(true);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
-        //}
-        //else
-          //  frame.setVisible(true);
+
     }
 }

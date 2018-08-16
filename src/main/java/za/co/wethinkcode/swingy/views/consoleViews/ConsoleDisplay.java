@@ -60,7 +60,7 @@ public class ConsoleDisplay implements IDisplay
         while (!(input.matches("\\d+$") || input.equals("q") || input.equals("b")))
         {
             clearScreen();
-            System.out.print(
+            System.out.println(
                     "\n********************************************************************************************\n" +
                     "*                                                                                          *\n" +
                     "*                                   Select a saved hero                                    *\n" +
@@ -69,18 +69,21 @@ public class ConsoleDisplay implements IDisplay
             int index = 0;
             for(Player player : heroes)
             {
-                index++;
-                String line = String.format("\tId: %d, Name: %s , Class: %s , Level: %d, ATK: %d, DEF: %d, HP: %d\n",
-                        index, player.getName(), player.getType(),player.getAtk(),player.getDef(),player.getHp()
+                String line = String.format("" +
+                                "" +
+                                "\t%d. Name: %s , Class: %s , Level: %d, ATK: %d, DEF: %d, HP: %d\n",
+                        index, player.getName(), player.getType(), player.getLevel(),player.getAtk(),
+                        player.getDef(),player.getHp()
                         );
                 System.out.print(line);
+                index++;
             }
             System.out.print(
-                    "*  q - Quit                                                                                 *\n" +
-                    "*  b - Back                                                                                 *\n" +
-                    "*                                                                                           *\n" +
+                    "\n*  q - Quit                                                                                *\n" +
+                    "*  b - Back                                                                                *\n" +
+                    "*                                                                                          *\n" +
                     "********************************************************************************************\n" +
-                    "Select by Id: ");
+                    "Choice: ");
             if (stdin.hasNext())
                 input = stdin.next();
             else

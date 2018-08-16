@@ -10,15 +10,15 @@ import javax.validation.constraints.NotNull;
 @Getter
 public class Swordsman extends Player
 {
-    public Swordsman(int id,String name, String type, int level, int exp, int atk, int def, int hp,
+    public Swordsman(String name, String type, int level, int exp, int atk, int def, int hp,
                      Coordinates coordinates)
     {
-        super(id, name,type, level, exp, atk, def, hp, coordinates);
+        super(name,type, level, exp, atk, def, hp, coordinates);
     }
 
-    public Swordsman(int id, String name, Coordinates coordinates)
+    public Swordsman(String name, Coordinates coordinates)
     {
-        super(id, name, "Swordsman",1, 1000, 60, 25, 200, coordinates);
+        super(name, "Swordsman",1, 1000, 60, 25, 200, coordinates);
     }
 
 }

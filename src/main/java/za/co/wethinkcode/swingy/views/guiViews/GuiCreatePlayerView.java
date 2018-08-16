@@ -97,10 +97,7 @@ public class GuiCreatePlayerView
                                         + defText.getText() + ","
                                         + hpText.getText());
                         if(controller.getHero() == null)
-                        {
-                            System.out.println("yes its null");
                             ((GuiDisplay)controller.getDisplay()).setErrorFrame(frame);
-                        }
                         else
                             frame.dispose();
                         controller.displayStage();

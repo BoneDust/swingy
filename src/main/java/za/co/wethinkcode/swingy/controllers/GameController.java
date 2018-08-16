@@ -63,8 +63,8 @@ public class GameController
         map = null;
         posBeforeBattle = new Coordinates(0,0);
         dbController = new DBController(this);
-       // dbController.createDB();
-        //dbController.initDB();
+        dbController.createDB();
+        dbController.initDB();
     }
 
     public boolean isGameContinues()
@@ -115,9 +115,8 @@ public class GameController
     public void createCustomHero(String type, String name, int level, int atk, int def, int hp)
     {
         int exp = (int)(level*1000 + (Math.pow(level - 1, 2) *450));
-        PlayerFactory.setId(PlayerFactory.getId()+ 1);
         Coordinates coordinates = CoordinateFactory.newCoordinates(0, 0, map);
-        hero = PlayerFactory.customPlayer(PlayerFactory.getId(), name, type, level, exp, atk, def, hp, coordinates, this);
+        hero = PlayerFactory.customPlayer(name, type, level, exp, atk, def, hp, coordinates, this);
         if (hero != null)
         {
             createMap(level);
@@ -413,7 +412,11 @@ public class GameController
                 if (input.equals("1"))
                     currentStage = gameStage.CREATION;
                 else if (input.equals("2"))
+                {
+                    retrieveHeroes();
+                    if (heroes.size() != 0)
                     currentStage = gameStage.SELECTION;
+                }
                 else
                     System.exit(1);
                 break;
@@ -430,12 +433,12 @@ public class GameController
                     currentStage = gameStage.START;
                 else
                 {
-                    retrieveHeroes();
                     retrieveHero(Integer.parseInt(input));
                     if (errors.size() != 0)
                         currentStage = gameStage.ERRORS;
                     else
                     {
+                        createMap(hero.getLevel());
                         createVillains();
                         updateMap();
                         currentStage = gameStage.PLAY;
@@ -443,7 +446,7 @@ public class GameController
                 }
                 break;
             case ERRORS:
-                errors = new ArrayList<>();
+                errors.clear();
                 creatingStage = creationStage.HERO_TYPE;
                 currentStage = gameStage.START;
                 break;
@@ -489,12 +492,12 @@ public class GameController
                     currentStage = gameStage.START;
                 else
                     gameContinues = false;
-                //saveHero();
+                saveHero();
                 break;
             case QUIT:
                 if (input.equals("1"))
                 {
-                 //   saveHero();
+                    saveHero();
                     gameContinues = false;
                 }
                 else if (input.equals("2"))
