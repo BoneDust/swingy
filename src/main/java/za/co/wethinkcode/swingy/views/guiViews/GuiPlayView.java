@@ -75,6 +75,8 @@ public class GuiPlayView
             public void actionPerformed(ActionEvent e)
             {
                 controller.receiveUserInput("w");
+                if (!controller.getCurrentStage().toString().equals("PLAY"))
+                    controller.displayStage();
             }
         });
 
@@ -84,6 +86,8 @@ public class GuiPlayView
             public void actionPerformed(ActionEvent e)
             {
                 controller.receiveUserInput("s");
+                if (!controller.getCurrentStage().toString().equals("PLAY"))
+                    controller.displayStage();
             }
         });
 
@@ -93,6 +97,8 @@ public class GuiPlayView
             public void actionPerformed(ActionEvent e)
             {
                 controller.receiveUserInput("a");
+                if (!controller.getCurrentStage().toString().equals("PLAY"))
+                    controller.displayStage();
             }
         });
 
@@ -101,7 +107,9 @@ public class GuiPlayView
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                controller.receiveUserInput("d");;
+                controller.receiveUserInput("d");
+                if (!controller.getCurrentStage().toString().equals("PLAY"))
+                    controller.displayStage();
             }
         });
 
@@ -217,7 +225,7 @@ public class GuiPlayView
 
     public void drawMap(final Map map)
     {
-
+        displayStats();
         if (reDrawMap)
         {
             reDrawMap = false;
@@ -227,13 +235,18 @@ public class GuiPlayView
             for (int i = 0; i < map.getSize(); i++) {
                 for (int j = 0; j < map.getSize(); j++) {
                     JButton button;
-                    if (map.getGrid()[i][j] == 1) {
+                    if (map.getGrid()[i][j] == 1)
+                    {
                         button = new JButton();
                         button.setBackground(Color.GREEN);
-                    } else if (map.getGrid()[i][j] == 2) {
+                    }
+                    else if (map.getGrid()[i][j] == 2)
+                    {
                         button = new JButton();
                         button.setBackground(Color.BLACK);
-                    } else {
+                    }
+                    else
+                    {
                         button = new JButton();
                         button.setBackground(Color.LIGHT_GRAY);
                     }
