@@ -9,7 +9,7 @@ import za.co.wethinkcode.swingy.models.map.Map;
 import za.co.wethinkcode.swingy.models.playables.Player;
 import za.co.wethinkcode.swingy.models.playables.Villain;
 import za.co.wethinkcode.swingy.views.IDisplay;
-import za.co.wethinkcode.swingy.views.consoleViews.consoleDisplay;
+import za.co.wethinkcode.swingy.views.consoleViews.ConsoleDisplay;
 import za.co.wethinkcode.swingy.views.guiViews.GuiDisplay;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import java.util.Random;
 
 public class GameController
 {
-    private enum gameStage{START, SELECTION, CREATION, ERRORS, PLAY, RUN_FIGHT, FORCED_FIGHT, GAME_OVER, QUIT};
+    public enum gameStage{START, SELECTION, CREATION, ERRORS, PLAY, RUN_FIGHT, FORCED_FIGHT, GAME_OVER, QUIT};
     private enum creationStage{HERO_TYPE, NAME_PROMPT, CREATION_TYPE, STATS};
     private gameStage currentStage;
     private DBController dbController;
@@ -36,14 +36,18 @@ public class GameController
     private IDisplay display;
     private boolean gameContinues;
     private boolean heroWon;
+    private GuiDisplay gui;
+    private ConsoleDisplay console;
     static String type = "", name="";
 
     public GameController(String view)
     {
+        console  = new ConsoleDisplay(this);
+        gui = new GuiDisplay(this);
         if (view.equals("console"))
-            display = new consoleDisplay(this);
+            display = console;
         else if (view.equals("gui"))
-            display = new GuiDisplay(this);
+            display = gui;
         else
         {
             System.out.println("Incorrect view selected.");
@@ -140,20 +144,20 @@ public class GameController
             else if (creatingStage == creationStage.NAME_PROMPT)
             {
                 creatingStage = creationStage.CREATION_TYPE;
-                ((consoleDisplay) display).displayHeroNamePrompt();
+                ((ConsoleDisplay) display).displayHeroNamePrompt();
             }
 
             else if (creatingStage == creationStage.CREATION_TYPE)
             {
                 creatingStage = creationStage.STATS;
                 name = input;
-                ((consoleDisplay) display).displayDefaultOrCustomHero();
+                ((ConsoleDisplay) display).displayDefaultOrCustomHero();
             }
 
             else
             {
                 if (input.equals("1"))
-                    ((consoleDisplay)display).displayHeroStatsPrompt(name, type);
+                    ((ConsoleDisplay)display).displayHeroStatsPrompt(name, type);
                 else
                     this.createDefaultHero(type, name);
                 if (errors.size() != 0)
@@ -165,6 +169,40 @@ public class GameController
                     currentStage = gameStage.PLAY;
                     creatingStage = creationStage.HERO_TYPE;
                 }
+            }
+        }
+    }
+
+    public void guiHeroCreation(String input)
+    {
+        if (input.equals("b"))
+            currentStage = gameStage.START;
+        else
+        {
+            String stats[] = input.split(",");
+            if (stats.length == 2) {
+                type = stats[0];
+                name = stats[1];
+                this.createDefaultHero(type, name);
+            }
+            else
+            {
+                type = stats[0];
+                name = stats[1];
+                int level, atk, def, hp;
+                level = Integer.parseInt(stats[2]);
+                atk = Integer.parseInt(stats[3]);
+                def = Integer.parseInt(stats[4]);
+                hp = Integer.parseInt(stats[5]);
+                this.createCustomHero(type, name, level, atk, def, hp);
+            }
+            if (errors.size() != 0)
+                currentStage = gameStage.ERRORS;
+            else
+            {
+                createVillains();
+                updateMap();
+                currentStage = gameStage.PLAY;
             }
         }
     }
@@ -334,6 +372,8 @@ public class GameController
         if (hero.getExp() >= nextLevelExp)
         {
             leveled = "\nYou leveled up!\n";
+            if (display instanceof GuiDisplay)
+                ((GuiDisplay) display).setRedrawMap(true);
             while (hero.getExp() > nextLevelExp)
             {
                 nextLevel += 1;
@@ -378,8 +418,10 @@ public class GameController
                     System.exit(1);
                 break;
             case CREATION:
-                if (display instanceof consoleDisplay)
-                    consoleHeroCreation(input);//todo needs an else for GuiDisplay.
+                if (display instanceof ConsoleDisplay)
+                    consoleHeroCreation(input);
+                else
+                    guiHeroCreation(input);
                 break;
             case SELECTION:
                 if (input.equals("q"))
@@ -466,13 +508,13 @@ public class GameController
 
     private void switchDisplays()
     {
-        if (display instanceof consoleDisplay)
+        if (display instanceof ConsoleDisplay)
         {
-            ((consoleDisplay)display).clearScreen();
-            display = new GuiDisplay(this);
+            ((ConsoleDisplay)display).clearScreen();
+            display = gui;
         }
         else
-            display = new consoleDisplay(this);
+            display = console;
         renderGame();
     }
 

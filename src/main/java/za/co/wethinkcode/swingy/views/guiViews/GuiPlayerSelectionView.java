@@ -1,33 +1,75 @@
 package za.co.wethinkcode.swingy.views.guiViews;
 
 import lombok.Getter;
+import za.co.wethinkcode.swingy.controllers.GameController;
+import za.co.wethinkcode.swingy.models.playables.Player;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 @Getter
 public class GuiPlayerSelectionView
 {
-    private static JFrame frame;
-    private static JButton btnContinue;
-    private static JButton btnBack;
-    private static JPanel panel;
-    private static ArrayList<String> options;
-    private static JComboBox cbOptions;
-    private static JLabel lHeading;
-    private static JTextArea info;
-    private static JScrollPane jScrollPane;
+    private GameController controller;
+    private  JFrame frame;
+    private  JButton btnContinue;
+    private  JButton btnBack;
+    private  JPanel panel;
+    private  ArrayList<String> options;
+    private  JComboBox cbOptions;
+    private  JLabel lHeading;
+    private  JTextArea info;
+    private  JScrollPane jScrollPane;
+    private String selectedHero = "-1";
 
-    private static  void initSelectionView()
+    public GuiPlayerSelectionView(GameController controller)
+    {
+        this.controller = controller;
+    }
+
+    private ArrayList<String> getShortHeroDetails(ArrayList<Player> heroes)
+    {
+        ArrayList<String> details = new ArrayList<>();
+        for(Player player : heroes)
+        {
+            String detail = player.getType() + " " + player.getName() + "(" + player.getId() +")";
+            details.add(detail);
+        }
+        return (details);
+    }
+
+    private ArrayList<String> getAllHeroDetails(ArrayList<Player> heroes)
+    {
+        ArrayList<String> details = new ArrayList<>();
+        for(Player player : heroes)
+        {
+            String detail = "\n\tID: "+ player.getId() +"\n\n";
+            detail += "\tName: "+ player.getName() +"\n\n";
+            detail += "\tClass: "+ player.getType() +"\n\n";
+            detail += "\tLevel: "+ player.getLevel() +"\n\n";
+            detail += "\tExp: "+ player.getExp() +"\n\n";
+            detail += "\tAtk: "+ player.getAtk() +"\n\n";
+            detail += "\tDef: "+ player.getDef() +"\n\n";
+            detail += "\tHp: "+ player.getHp() +"\n\n";
+            details.add(detail);
+        }
+        return (details);
+    }
+
+    private   void initSelectionView(ArrayList<Player> heroes)
     {
         frame = new JFrame("Swingy");
         btnContinue = new JButton("Start Game");
+        if (heroes.size() == 0)
+            btnContinue.setEnabled(false);
+        else
+            btnContinue.setEnabled(true);
         btnBack = new JButton("Back");
         panel = new JPanel();
-        options = new ArrayList<>(Arrays.asList("Select a hero","budas","lerapo","lerole", "sputla", "yerr"));
+        options = getShortHeroDetails(heroes);
         cbOptions = new JComboBox(options.toArray());
         lHeading = new JLabel("Hero Details");
         info = new JTextArea();
@@ -35,11 +77,11 @@ public class GuiPlayerSelectionView
         info.setEditable(false);
         setColors();
         setBounds();
-        setListeners();
+        setListeners(heroes);
         addToPanel();
     }
 
-    private static void addToPanel()
+    private  void addToPanel()
     {
         panel.add(btnBack);
         panel.add(btnContinue);
@@ -48,16 +90,16 @@ public class GuiPlayerSelectionView
         panel.add(jScrollPane);
     }
 
-    private static void setBounds()
+    private  void setBounds()
     {
         lHeading.setBounds(180, 10 ,150,20);
         jScrollPane.setBounds(50, 70, 350,300);
-        cbOptions.setBounds(100, 380, 250, 20);
+        cbOptions.setBounds(50, 380, 350, 20);
         btnBack.setBounds(100, 420 ,130,20);
         btnContinue.setBounds(230, 420 ,130,20);
     }
 
-    private static void setColors()
+    private  void setColors()
     {
         cbOptions.setBackground(Color.DARK_GRAY);
         cbOptions.setForeground(Color.WHITE);
@@ -67,15 +109,16 @@ public class GuiPlayerSelectionView
         panel.setBackground(Color.DARK_GRAY);
     }
 
-    private static void setListeners()
+    private  void setListeners(final ArrayList<Player> heroes)
     {
         btnContinue.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                GuiPlayView.displayPlayView();
                 frame.dispose();
+                controller.receiveUserInput(selectedHero);
+                controller.displayStage();
             }
         });
 
@@ -84,8 +127,9 @@ public class GuiPlayerSelectionView
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                GuiStartView.displayStartView();
-                frame.setVisible(false);
+                frame.dispose();
+                controller.receiveUserInput("b");
+                controller.displayStage();
             }
         });
 
@@ -94,23 +138,20 @@ public class GuiPlayerSelectionView
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                if (cbOptions.getSelectedItem().equals("budas"))
-                    info.setText("maar budas keng ka wena                    nnnnnnnn\n\n\n\n\n\nnnnnnnnnn\n\n\n\n\nnnnnnnnnnnn\n\n\n\n\nnnnnnnnnnnnnnnnn\n\n\n\n\nnnnnnnnnnnnnnnnnn\n\n\n\n\n\n\n\n\n\n\n\nnnnnnnn?");
-                else if (cbOptions.getSelectedItem().equals("yerr"))
-                    info.setText("maar budas wa bora?");
-                else if (cbOptions.getSelectedItem().equals("Select a hero"))
-                    info.setText("");
-                else
-                    info.setText("maar budas o lesepa?");
+                ArrayList<String> details = getAllHeroDetails(heroes);
+                Player player = heroes.get(cbOptions.getSelectedIndex());
+                info.setText(details.get(cbOptions.getSelectedIndex()));
+                selectedHero = Integer.toString(player.getId());
             }
         });
     }
 
-    public static void displaySelectionView()
+    public  void displaySelectionView(ArrayList<Player> heroes)
     {
-        if (frame == null)
-        {
-            initSelectionView();
+    //    if (frame == null)
+      //  {
+            initSelectionView(heroes);
+
             frame.setContentPane(panel);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setLocationRelativeTo(null);
@@ -120,8 +161,10 @@ public class GuiPlayerSelectionView
             frame.setLayout(null);
             frame.pack();
             frame.setVisible(true);
-        }
-        else
-            frame.setVisible(true);
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
+        //}
+        //else
+          //  frame.setVisible(true);
     }
 }

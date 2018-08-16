@@ -1,6 +1,9 @@
 package za.co.wethinkcode.swingy.views.guiViews;
 
 import lombok.Getter;
+import lombok.Setter;
+import za.co.wethinkcode.swingy.controllers.GameController;
+import za.co.wethinkcode.swingy.models.map.Map;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -11,20 +14,26 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 @Getter
+@Setter
 public class GuiPlayView
 {
-    private static JFrame frame;
-    private static JButton btnContinue, btnExit, btnNorth, btnSouth, btnWest, btnEast, btnSwitch;
-    private static JPanel  mapPanel, arenaPanel, movementPanel, statsPanel, reportPanel;
-    private static JLabel reportLabel, statsLabel, arenaLabel;
-    private static JTextArea reportText, statsText;
-    private static JScrollPane reportScroll, statsScroll;
+    private boolean initialised = false, reDrawMap = true;
+    private GameController controller;
+    private  JFrame frame;
+    private  JButton btnQuit, btnNorth, btnSouth, btnWest, btnEast, btnSwitch;
+    private  JPanel  mapPanel, arenaPanel, movementPanel, statsPanel, reportPanel;
+    private  JLabel reportLabel, statsLabel, arenaLabel;
+    private  JTextArea reportText, statsText;
+    private  JScrollPane reportScroll, statsScroll;
 
-    private static  void initPlayView()
+    public GuiPlayView(GameController controller)
     {
-        frame = new JFrame("Swingy");
-        btnContinue = new JButton("save and continue");
-        btnExit = new JButton("save and exit");
+        this.controller = controller;
+    }
+    
+    private   void initPlayView()
+    {
+        btnQuit = new JButton("quit");
         btnSwitch = new JButton("switch to console");
         btnWest = new JButton("WEST");
         btnEast = new JButton("EAST");
@@ -50,20 +59,81 @@ public class GuiPlayView
         reportPanel.setLayout(null);
 
         movementPanel.setLayout(null);
-        mapPanel.setLayout(new GridLayout(5,5));
         arenaPanel.setLayout(null);
         setColors();
         setBounds();
-        setListeners();
+       // if (initialised)
+            setListeners();
         addToPanel();
     }
 
-    private static void setListeners()
+    private  void setListeners()
     {
-        //todo
+        btnNorth.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                controller.receiveUserInput("w");
+            }
+        });
+
+        btnSouth.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                controller.receiveUserInput("s");
+            }
+        });
+
+        btnWest.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                controller.receiveUserInput("a");
+            }
+        });
+
+        btnEast.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                controller.receiveUserInput("d");;
+            }
+        });
+
+        btnSwitch.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                frame.setVisible(false);
+               // initialised = false;
+                controller.receiveUserInput("x");
+                controller.displayStage();
+                System.out.println("switch clicked : stage = " + controller.getCurrentStage().toString());
+
+
+            }
+        });
+
+        btnQuit.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                controller.receiveUserInput("q");
+                controller.displayStage();
+                System.out.println("quit clicked : stage = " + controller.getCurrentStage().toString());
+
+            }
+        });
     }
 
-    private static void setBounds()
+    private  void setBounds()
     {
         statsLabel.setBounds(120, 10, 100, 20);
         statsScroll.setBounds(20, 40, 270, 460);
@@ -77,16 +147,15 @@ public class GuiPlayView
         btnSouth.setBounds(560, 100, 120, 20);
         btnEast.setBounds(700, 60, 120, 20);
         btnWest.setBounds(420, 60, 120, 20);
-        btnContinue.setBounds(380, 140, 160, 20);
-        btnExit.setBounds(700, 140, 160, 20);
-        btnSwitch.setBounds(540, 170, 160, 20);
+        btnQuit.setBounds(700, 140, 160, 20);
+        btnSwitch.setBounds(380, 140, 160, 20);
         movementPanel.setPreferredSize( new Dimension( 1200, 200));
         arenaPanel.setPreferredSize( new Dimension( 600, 495 ) );
         arenaLabel.setBounds(280, 10, 100, 20);
         mapPanel.setBounds(0,40,600,455);
     }
 
-    private static void setColors()
+    private  void setColors()
     {
         statsLabel.setForeground(Color.WHITE);
         statsText.setBackground(Color.DARK_GRAY);
@@ -101,7 +170,7 @@ public class GuiPlayView
         arenaPanel.setBackground(Color.DARK_GRAY);
     }
 
-    private static void addToPanel()
+    private  void addToPanel()
     {
         statsPanel.add(statsLabel);
         statsPanel.add(statsScroll);
@@ -113,42 +182,98 @@ public class GuiPlayView
         movementPanel.add(btnSouth);
         movementPanel.add(btnEast);
         movementPanel.add(btnWest);
-        movementPanel.add(btnContinue);
-        movementPanel.add(btnExit);
+        movementPanel.add(btnQuit);
         movementPanel.add(btnSwitch);
 
         arenaPanel.add(arenaLabel);
         arenaPanel.add(mapPanel);
     }
 
-    public static void displayPlayView()
+    public  void displayPlayView()
     {
-        initPlayView();
-        drawGrid(5);
-        frame.add(statsPanel,BorderLayout.WEST);
-        frame.add(arenaPanel, BorderLayout.CENTER);
-        frame.add(reportPanel,BorderLayout.EAST);
-        frame.add(movementPanel, BorderLayout.SOUTH);
-        frame.setBackground(Color.WHITE);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setPreferredSize(new Dimension(1200, 700));
-        frame.setResizable(false);
-        frame.pack();
+        if (!initialised)
+        {
+            initPlayView();
+            frame = new JFrame("Swingy");
+            frame.add(statsPanel,BorderLayout.WEST);
+            frame.add(arenaPanel, BorderLayout.CENTER);
+            frame.add(reportPanel,BorderLayout.EAST);
+            frame.add(movementPanel, BorderLayout.SOUTH);
+            frame.setBackground(Color.WHITE);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setLocationRelativeTo(null);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setPreferredSize(new Dimension(1200, 700));
+            frame.setResizable(false);
+            frame.pack();
+            initialised = true;
+        }
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
+        displayStats();
         frame.setVisible(true);
+        drawMap(controller.getMap());
     }
 
-    private static void drawGrid(int size)
+    public void drawMap(final Map map)
     {
-        for (int i = 0; i < size; i++)
+
+        if (reDrawMap)
         {
-            for (int j = 0; j < size; j++)
-            {
-                JButton button = new JButton("boom");
-                button.setEnabled(false);
-                mapPanel.add(button);
+            reDrawMap = false;
+            mapPanel.removeAll();
+            mapPanel.setLayout(new GridLayout(map.getSize(), map.getSize()));
+
+            for (int i = 0; i < map.getSize(); i++) {
+                for (int j = 0; j < map.getSize(); j++) {
+                    JButton button;
+                    if (map.getGrid()[i][j] == 1) {
+                        button = new JButton();
+                        button.setBackground(Color.GREEN);
+                    } else if (map.getGrid()[i][j] == 2) {
+                        button = new JButton();
+                        button.setBackground(Color.BLACK);
+                    } else {
+                        button = new JButton();
+                        button.setBackground(Color.LIGHT_GRAY);
+                    }
+                    button.setEnabled(false);
+                    mapPanel.add(button);
+                }
             }
         }
+        else
+        {
+            for (int i = 0; i < map.getSize(); i++) {
+                for (int j = 0; j < map.getSize(); j++) {
+                    int index = (map.getSize() * (i + 1)) - (map.getSize() - j);
+                    Component item = mapPanel.getComponent(index);
+                    if (map.getGrid()[i][j] == 1)
+                        item.setBackground(Color.GREEN);
+                     else if (map.getGrid()[i][j] == 2)
+                       item.setBackground(Color.BLACK);
+                    else
+                        item.setBackground(Color.LIGHT_GRAY);
+                }
+            }
+        }
+    }
+    
+    private void displayStats()
+    { 
+        String detail = "\n\tID: "+ controller.getHero().getId() +"\n\n\n";
+        detail += "\tName: "+ controller.getHero().getName() +"\n\n\n";
+        detail += "\tClass: "+ controller.getHero().getType() +"\n\n\n";
+        detail += "\tLevel: "+ controller.getHero().getLevel() +"\n\n\n";
+        detail += "\tExp: "+ controller.getHero().getExp() +"\n\n\n";
+        detail += "\tAtk: "+ controller.getHero().getAtk() +"\n\n\n";
+        detail += "\tDef: "+ controller.getHero().getDef() +"\n\n\n";
+        detail += "\tHp: "+ controller.getHero().getHp() +"\n\n\n";
+        statsText.setText(detail);
+    }
+
+    public void displayBattle(String report)
+    {
+        reportText.setText(report);
     }
 }

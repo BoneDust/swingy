@@ -1,6 +1,7 @@
 package za.co.wethinkcode.swingy.views.guiViews;
 
 import lombok.Getter;
+import za.co.wethinkcode.swingy.controllers.GameController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,15 +11,22 @@ import java.awt.event.ActionListener;
 @Getter
 public class GuiStartView
 {
-    private static JFrame frame = new JFrame("Swingy");
-    private static ButtonGroup btnGroup = new ButtonGroup();
-    private static JButton btnContinue = new JButton("Proceed");
-    private static JPanel pWelcome = new JPanel();
-    private static JLabel lblWelcome = new JLabel("Welcome to swingy");
-    private static JRadioButton rbtnNewHero = new JRadioButton("Create hero");
-    private static JRadioButton rbtnPreviousHero = new JRadioButton("Select previous hero.");
+    private GameController controller;
 
-    private static void initStartView()
+    private  JFrame frame = new JFrame("Swingy");
+    private  ButtonGroup btnGroup = new ButtonGroup();
+    private  JButton btnContinue = new JButton("Proceed");
+    private  JPanel pWelcome = new JPanel();
+    private  JLabel lblWelcome = new JLabel("Welcome to swingy");
+    private  JRadioButton rbtnNewHero = new JRadioButton("Create hero");
+    private  JRadioButton rbtnPreviousHero = new JRadioButton("Select previous hero.");
+
+    public GuiStartView(GameController controller)
+    {
+        this.controller = controller;
+    }
+
+    private  void initStartView()
     {
         setColors();
         setBounds();
@@ -26,7 +34,7 @@ public class GuiStartView
         addToPanel();
     }
 
-    private static void addToPanel()
+    private  void addToPanel()
     {
         pWelcome.add(btnContinue);
         pWelcome.add(rbtnNewHero);
@@ -37,28 +45,24 @@ public class GuiStartView
         btnGroup.add(rbtnPreviousHero);
     }
 
-    private static void setListeners()
+    private  void setListeners()
     {
         btnContinue.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
             {
+                frame.dispose();
                 if (rbtnPreviousHero.isSelected())
-                {
-                    GuiPlayerSelectionView.displaySelectionView();
-                    frame.dispose();
-                }
+                    controller.receiveUserInput("2");
                 else
-                {
-                    GuiCreatePlayerView.displayCreatePlayerView();
-                    frame.dispose();
-                }
+                    controller.receiveUserInput("1");
+                controller.displayStage();
             }
         });
     }
 
-    private static void setBounds()
+    private  void setBounds()
     {
         lblWelcome.setBounds(180, 10 ,200,20);
         btnContinue.setBounds(200, 120 ,100,20);
@@ -66,7 +70,7 @@ public class GuiStartView
         rbtnPreviousHero.setBounds(300, 60 ,200,40);
     }
 
-    private static void setColors()
+    private  void setColors()
     {
         lblWelcome.setForeground(Color.WHITE);
         rbtnNewHero.setBackground(Color.DARK_GRAY);
@@ -76,9 +80,10 @@ public class GuiStartView
         pWelcome.setBackground(Color.DARK_GRAY);
     }
 
-    public static void displayStartView()
+    public  void displayStartView()
     {
         initStartView();
+
         frame.setContentPane(pWelcome);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
@@ -88,5 +93,7 @@ public class GuiStartView
         frame.setLayout(null);
         frame.pack();
         frame.setVisible(true);
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
     }
 }

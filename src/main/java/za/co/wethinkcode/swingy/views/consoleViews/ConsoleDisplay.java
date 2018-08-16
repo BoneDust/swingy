@@ -7,11 +7,11 @@ import za.co.wethinkcode.swingy.views.IDisplay;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class consoleDisplay implements IDisplay
+public class ConsoleDisplay implements IDisplay
 {
     private GameController controller;
     private Scanner stdin;
-    public consoleDisplay(GameController controller)
+    public ConsoleDisplay(GameController controller)
     {
         this.controller = controller;
         stdin = new Scanner(System.in);
