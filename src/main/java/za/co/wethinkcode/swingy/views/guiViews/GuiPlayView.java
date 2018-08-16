@@ -118,13 +118,11 @@ public class GuiPlayView
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                frame.setVisible(false);
-               // initialised = false;
+                frame.dispose();
+                initialised = false;
+                reDrawMap = true;
                 controller.receiveUserInput("x");
-                controller.displayStage();
-                System.out.println("switch clicked : stage = " + controller.getCurrentStage().toString());
-
-
+               // controller.displayStage();
             }
         });
 
@@ -135,8 +133,6 @@ public class GuiPlayView
             {
                 controller.receiveUserInput("q");
                 controller.displayStage();
-                System.out.println("quit clicked : stage = " + controller.getCurrentStage().toString());
-
             }
         });
     }

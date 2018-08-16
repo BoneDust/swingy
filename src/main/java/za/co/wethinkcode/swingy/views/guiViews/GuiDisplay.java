@@ -86,7 +86,21 @@ public class GuiDisplay implements IDisplay
 
     public void displayGameOver(boolean heroWon){}//todo
 
-    public void displayQuitDialogue(){}//todo
+    public void displayQuitDialogue()
+    {
+        int dialogButton = JOptionPane.YES_NO_OPTION;
+        int dialogResult = JOptionPane.showConfirmDialog (playView.getFrame(), "Are you sure you want to quit?","Exiting game",dialogButton);
+        if(dialogResult == JOptionPane.YES_OPTION)
+        {
+            controller.receiveUserInput("1");
+            playView.getFrame().dispose();
+        }
+        else
+        {
+            controller.receiveUserInput("2");
+            controller.displayStage();
+        }
+    }
 
     public void displayForcedFightNotice()
     {
