@@ -35,7 +35,7 @@ public class GuiPlayerSelectionView
         ArrayList<String> details = new ArrayList<>();
         for(Player player : heroes)
         {
-            String detail = player.getType() + " " + player.getName() + "(" + player.getId() +")";
+            String detail = player.getType() + " " + player.getName();
             details.add(detail);
         }
         return (details);
@@ -46,8 +46,7 @@ public class GuiPlayerSelectionView
         ArrayList<String> details = new ArrayList<>();
         for(Player player : heroes)
         {
-            String detail = "\n\tID: "+ player.getId() +"\n\n";
-            detail += "\tName: "+ player.getName() +"\n\n";
+            String detail = "\n\tName: "+ player.getName() +"\n\n";
             detail += "\tClass: "+ player.getType() +"\n\n";
             detail += "\tLevel: "+ player.getLevel() +"\n\n";
             detail += "\tExp: "+ player.getExp() +"\n\n";

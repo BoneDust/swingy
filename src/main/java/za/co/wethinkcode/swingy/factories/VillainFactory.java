@@ -14,10 +14,8 @@ import java.util.Set;
 public class VillainFactory
 {
 
-    private static int id = 0;
     public static Villain newVillain(String name, String phrase, Coordinates coordinates)
     {
-        id++;
         int level, exp, atk, def, hp;
         Random rand = new Random();
         level = rand.nextInt(10) + 1;
@@ -25,7 +23,7 @@ public class VillainFactory
         atk = rand.nextInt(10 - level + 1) * 10;
         def = rand.nextInt(10 - level  + 1) * 10;
         hp = rand.nextInt(10 - level + 1) * 30;
-        Villain villain = new Villain(id, name, "Villain", level, exp, atk, def, hp, coordinates);
+        Villain villain = new Villain(name, "Villain", level, exp, atk, def, hp, coordinates);
         villain.setCatchPhrase(phrase);
 
         return (villain);

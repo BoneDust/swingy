@@ -84,7 +84,26 @@ public class GuiDisplay implements IDisplay
         controller.displayStage();
     }
 
-    public void displayGameOver(boolean heroWon){}//todo
+    public void displayGameOver(boolean heroWon)
+    {
+        String result = heroWon? "Won!" : "Lost!";
+
+        Object[] options1 = { "Main menu", "Quit" };
+
+        int dialogResult = JOptionPane.showOptionDialog(playView.getFrame(), "You " + result,"Game Over",         JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE,
+                null, options1, null);
+        if(dialogResult == JOptionPane.YES_OPTION)
+        {
+            controller.receiveUserInput("1");
+            playView.getFrame().dispose();
+            controller.displayStage();
+        }
+        else
+        {
+            controller.receiveUserInput("2");
+            playView.getFrame().dispose();
+        }
+    }
 
     public void displayQuitDialogue()
     {
@@ -112,6 +131,16 @@ public class GuiDisplay implements IDisplay
 
     public void displayRenderGame()
     {
-            controller.displayStage();
+        /*if (playView.isSwitched())
+        {
+            System.out.println("ke a gana");
+            playView.setSwitched(false);
+            playView.getFrame().setVisible(true);
+            playView.drawMap(controller.getMap());
+        }
+        else
+            controller.displayStage();*/
+        controller.setCurrentStage(controller.gameStage().PLAY);
+        displayPlayView();
     }
 }

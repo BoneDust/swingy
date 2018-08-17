@@ -69,6 +69,7 @@ public class ConsoleDisplay implements IDisplay
             int index = 0;
             for(Player player : heroes)
             {
+                index++;
                 String line = String.format("" +
                                 "" +
                                 "\t%d. Name: %s , Class: %s , Level: %d, ATK: %d, DEF: %d, HP: %d\n",
@@ -76,7 +77,7 @@ public class ConsoleDisplay implements IDisplay
                         player.getDef(),player.getHp()
                         );
                 System.out.print(line);
-                index++;
+
             }
             System.out.print(
                     "\n*  q - Quit                                                                                *\n" +

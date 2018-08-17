@@ -17,7 +17,7 @@ import java.util.Arrays;
 @Setter
 public class GuiPlayView
 {
-    private boolean initialised = false, reDrawMap = true;
+    private boolean initialised = false, reDrawMap = true, switched = false;
     private GameController controller;
     private  JFrame frame;
     private  JButton btnQuit, btnNorth, btnSouth, btnWest, btnEast, btnSwitch;
@@ -118,10 +118,10 @@ public class GuiPlayView
             public void actionPerformed(ActionEvent e)
             {
                 frame.setVisible(false);
-                //initialised = false;
-                //reDrawMap = true;
+                reDrawMap = true;
+                switched = true;
                 controller.receiveUserInput("x");
-               // controller.displayStage();
+
             }
         });
 
@@ -208,12 +208,11 @@ public class GuiPlayView
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setPreferredSize(new Dimension(1200, 700));
             frame.setResizable(false);
-            frame.pack();
             initialised = true;
         }
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
-        displayStats();
+        frame.pack();
         frame.setVisible(true);
         drawMap(controller.getMap());
     }
@@ -269,8 +268,7 @@ public class GuiPlayView
     
     private void displayStats()
     { 
-        String detail = "\n\tID: "+ controller.getHero().getId() +"\n\n\n";
-        detail += "\tName: "+ controller.getHero().getName() +"\n\n\n";
+        String detail = "\n\tName: "+ controller.getHero().getName() +"\n\n\n";
         detail += "\tClass: "+ controller.getHero().getType() +"\n\n\n";
         detail += "\tLevel: "+ controller.getHero().getLevel() +"\n\n\n";
         detail += "\tExp: "+ controller.getHero().getExp() +"\n\n\n";

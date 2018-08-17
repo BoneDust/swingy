@@ -63,8 +63,8 @@ public class GameController
         map = null;
         posBeforeBattle = new Coordinates(0,0);
         dbController = new DBController(this);
-        dbController.createDB();
-        dbController.initDB();
+        //dbController.createDB();
+       // dbController.initDB();
     }
 
     public boolean isGameContinues()
@@ -413,8 +413,7 @@ public class GameController
                     currentStage = gameStage.CREATION;
                 else if (input.equals("2"))
                 {
-                    retrieveHeroes();
-                    if (heroes.size() != 0)
+                    //retrieveHeroes();
                     currentStage = gameStage.SELECTION;
                 }
                 else
@@ -433,7 +432,7 @@ public class GameController
                     currentStage = gameStage.START;
                 else
                 {
-                    retrieveHero(Integer.parseInt(input));
+                    retrieveHero(Integer.parseInt(input) - 1);//todo needs checking
                     if (errors.size() != 0)
                         currentStage = gameStage.ERRORS;
                     else
@@ -492,12 +491,12 @@ public class GameController
                     currentStage = gameStage.START;
                 else
                     gameContinues = false;
-                saveHero();
+                //saveHero();
                 break;
             case QUIT:
                 if (input.equals("1"))
                 {
-                    saveHero();
+                    //saveHero();
                     gameContinues = false;
                 }
                 else if (input.equals("2"))
@@ -569,18 +568,12 @@ public class GameController
         heroes = dbController.getPlayers();
     }
 
-    private void retrieveHero(int id)
+    private void retrieveHero(int index)
     {
-        for (Player player : heroes)
-        {
-            if (player.getId() == id)
-            {
-                hero = player;
-                break;
-            }
-        }
-        if (hero == null)
-            errors.add("Error : Invalid id supplied.");
+        if (index >= 0 && index < heroes.size())
+            hero = heroes.get(index);
+        else
+            errors.add("Error : Invalid .");
     }
 
     private String pickUpArtefact()
