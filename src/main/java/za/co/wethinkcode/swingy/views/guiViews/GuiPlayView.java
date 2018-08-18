@@ -74,8 +74,7 @@ public class GuiPlayView
             public void actionPerformed(ActionEvent e)
             {
                 controller.receiveUserInput("w");
-                if (!controller.getCurrentStage().toString().equals("PLAY"))
-                    controller.displayStage();
+                controller.displayStage();
             }
         });
 
@@ -85,8 +84,7 @@ public class GuiPlayView
             public void actionPerformed(ActionEvent e)
             {
                 controller.receiveUserInput("s");
-                if (!controller.getCurrentStage().toString().equals("PLAY"))
-                    controller.displayStage();
+                controller.displayStage();
             }
         });
 
@@ -96,8 +94,7 @@ public class GuiPlayView
             public void actionPerformed(ActionEvent e)
             {
                 controller.receiveUserInput("a");
-                if (!controller.getCurrentStage().toString().equals("PLAY"))
-                    controller.displayStage();
+                controller.displayStage();
             }
         });
 
@@ -107,8 +104,7 @@ public class GuiPlayView
             public void actionPerformed(ActionEvent e)
             {
                 controller.receiveUserInput("d");
-                if (!controller.getCurrentStage().toString().equals("PLAY"))
-                    controller.displayStage();
+                controller.displayStage();
             }
         });
 
@@ -117,11 +113,9 @@ public class GuiPlayView
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                frame.setVisible(false);
-                reDrawMap = true;
-                switched = true;
+                frame.dispose();
+                initialised = false;
                 controller.receiveUserInput("x");
-
             }
         });
 
@@ -152,7 +146,7 @@ public class GuiPlayView
         btnWest.setBounds(420, 60, 120, 20);
         btnQuit.setBounds(700, 140, 160, 20);
         btnSwitch.setBounds(380, 140, 160, 20);
-        movementPanel.setPreferredSize( new Dimension( 1200, 200));
+        movementPanel.setPreferredSize( new Dimension( 1200, 195));
         arenaPanel.setPreferredSize( new Dimension( 600, 495 ) );
         arenaLabel.setBounds(280, 10, 100, 20);
         mapPanel.setBounds(0,40,600,455);
@@ -206,13 +200,13 @@ public class GuiPlayView
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setLocationRelativeTo(null);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setPreferredSize(new Dimension(1200, 700));
+            frame.setPreferredSize(new Dimension(1200, 720));
             frame.setResizable(false);
+            frame.pack();
             initialised = true;
         }
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
-        frame.pack();
         frame.setVisible(true);
         drawMap(controller.getMap());
     }
@@ -220,54 +214,40 @@ public class GuiPlayView
     public void drawMap(final Map map)
     {
         displayStats();
-        if (reDrawMap)
-        {
-            reDrawMap = false;
-            mapPanel.removeAll();
-            mapPanel.setLayout(new GridLayout(map.getSize(), map.getSize()));
 
-            for (int i = 0; i < map.getSize(); i++) {
-                for (int j = 0; j < map.getSize(); j++) {
-                    JButton button;
-                    if (map.getGrid()[i][j] == 1)
-                    {
-                        button = new JButton();
-                        button.setBackground(Color.GREEN);
-                    }
-                    else if (map.getGrid()[i][j] == 2)
-                    {
-                        button = new JButton();
-                        button.setBackground(Color.BLACK);
-                    }
-                    else
-                    {
-                        button = new JButton();
-                        button.setBackground(Color.LIGHT_GRAY);
-                    }
-                    button.setEnabled(false);
-                    mapPanel.add(button);
-                }
-            }
-        }
-        else
+        mapPanel.removeAll();
+        mapPanel.setLayout(new GridLayout(map.getSize(), map.getSize()));
+        for (int i = 0; i < map.getSize(); i++)
         {
-            for (int i = 0; i < map.getSize(); i++) {
-                for (int j = 0; j < map.getSize(); j++) {
-                    int index = (map.getSize() * (i + 1)) - (map.getSize() - j);
-                    Component item = mapPanel.getComponent(index);
-                    if (map.getGrid()[i][j] == 1)
-                        item.setBackground(Color.GREEN);
-                     else if (map.getGrid()[i][j] == 2)
-                        item.setBackground(Color.BLACK);
-                    else
-                        item.setBackground(Color.LIGHT_GRAY);
+            for (int j = 0; j < map.getSize(); j++)
+            {
+                JButton button;
+                if (map.getGrid()[i][j] == 1)
+                {
+                    button = new JButton();
+                    button.setBackground(Color.GREEN);
                 }
+                else if (map.getGrid()[i][j] == 2)
+                {
+                    button = new JButton();
+                    button.setBackground(Color.BLACK);
+                }
+                else
+                {
+                    button = new JButton();
+                    button.setBackground(Color.LIGHT_GRAY);
+                }
+                button.setOpaque(true);
+                button.setEnabled(false);
+                mapPanel.add(button);
             }
         }
+        mapPanel.revalidate();
+        mapPanel.repaint();
     }
-    
+
     private void displayStats()
-    { 
+    {
         String detail = "\n\tName: "+ controller.getHero().getName() +"\n\n\n";
         detail += "\tClass: "+ controller.getHero().getType() +"\n\n\n";
         detail += "\tLevel: "+ controller.getHero().getLevel() +"\n\n\n";

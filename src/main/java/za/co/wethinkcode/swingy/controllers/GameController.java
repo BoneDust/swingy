@@ -63,8 +63,8 @@ public class GameController
         map = null;
         posBeforeBattle = new Coordinates(0,0);
         dbController = new DBController(this);
-        //dbController.createDB();
-       // dbController.initDB();
+        dbController.createDB();
+        dbController.initDB();
     }
 
     public boolean isGameContinues()
@@ -278,7 +278,7 @@ public class GameController
     private String simulateFight(Villain villain)
     {
         Random rand = new Random();
-        String report = hero.getName() + "(" + hero.getType() + ")  vs " + villain.getName() + "(" +
+        String report = "\n" + hero.getName() + "(" + hero.getType() + ")  vs " + villain.getName() + "(" +
                         villain.getCatchPhrase() +")\n\n";
         report += hero.getName() +" initial hp : " + hero.getHp() +"\n";
         report += villain.getName() +" initial hp : " + villain.getHp() +"\n";
@@ -413,7 +413,7 @@ public class GameController
                     currentStage = gameStage.CREATION;
                 else if (input.equals("2"))
                 {
-                    //retrieveHeroes();
+                    retrieveHeroes();
                     currentStage = gameStage.SELECTION;
                 }
                 else
@@ -454,14 +454,19 @@ public class GameController
                 {
                     movePlayer(input);
                     updateMap();
-                    display.displayMap(map);
                     if (enemyEncountered())
+                    {
+                        display.displayMap(map);
                         currentStage = gameStage.RUN_FIGHT;
+                    }
                     else
                     {
                         checkPlayerWon();
                         if (heroWon)
+                        {
+                            display.displayMap(map);
                             currentStage = gameStage.GAME_OVER;
+                        }
                     }
                 }
                 else
@@ -491,12 +496,12 @@ public class GameController
                     currentStage = gameStage.START;
                 else
                     gameContinues = false;
-                //saveHero();
+                saveHero();
                 break;
             case QUIT:
                 if (input.equals("1"))
                 {
-                    //saveHero();
+                    saveHero();
                     gameContinues = false;
                 }
                 else if (input.equals("2"))
@@ -512,11 +517,15 @@ public class GameController
     {
         if (display instanceof ConsoleDisplay)
         {
+            console.setSwitched(true);
             ((ConsoleDisplay)display).clearScreen();
             display = gui;
         }
         else
+        {
+            console.setSwitched(false);
             display = console;
+        }
         renderGame();
     }
 
@@ -573,7 +582,7 @@ public class GameController
         if (index >= 0 && index < heroes.size())
             hero = heroes.get(index);
         else
-            errors.add("Error : Invalid .");
+            errors.add("Error : Invalid hero selected.");
     }
 
     private String pickUpArtefact()

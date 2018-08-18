@@ -153,8 +153,6 @@ public class GuiCreatePlayerView
         nameText.setForeground(Color.WHITE);
         nameLabel.setForeground(Color.WHITE);
         typeLabel.setForeground(Color.WHITE);
-        typeComboBox.setBackground(Color.DARK_GRAY);
-        typeComboBox.setForeground(Color.WHITE);
         levelText.setForeground(Color.WHITE);
         levelText.setCaretColor(Color.WHITE);
         atkText.setForeground(Color.WHITE);
@@ -195,7 +193,7 @@ public class GuiCreatePlayerView
         defText.setVisible(false); defLabel.setVisible(false);
         hpText.setVisible(false); hpLabel.setVisible(false);
         errorLabel.setVisible(false);
-        frame.setPreferredSize(new Dimension(450, 450));
+        frame.setPreferredSize(new Dimension(400, 500));
         frame.setResizable(false);
     }
 
@@ -239,6 +237,7 @@ public class GuiCreatePlayerView
         frame.setVisible(true);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
+
 
     }
 }

@@ -90,7 +90,8 @@ public class GuiDisplay implements IDisplay
 
         Object[] options1 = { "Main menu", "Quit" };
 
-        int dialogResult = JOptionPane.showOptionDialog(playView.getFrame(), "You " + result,"Game Over",         JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE,
+        int dialogResult = JOptionPane.showOptionDialog(playView.getFrame(), "You " + result,"Game Over",
+                JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE,
                 null, options1, null);
         if(dialogResult == JOptionPane.YES_OPTION)
         {
@@ -131,16 +132,6 @@ public class GuiDisplay implements IDisplay
 
     public void displayRenderGame()
     {
-        /*if (playView.isSwitched())
-        {
-            System.out.println("ke a gana");
-            playView.setSwitched(false);
-            playView.getFrame().setVisible(true);
-            playView.drawMap(controller.getMap());
-        }
-        else
-            controller.displayStage();*/
-        controller.setCurrentStage(controller.gameStage().PLAY);
-        displayPlayView();
+        controller.displayStage();
     }
 }

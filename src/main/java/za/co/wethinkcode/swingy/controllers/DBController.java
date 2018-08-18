@@ -149,27 +149,63 @@ public class DBController
         return (players);
     }
 
-    public void recordHero(Player player)
+    public boolean heroExists(Player player)
     {
+        boolean exists = false;
         Connection connection = null;
         Statement statement = null;
         try
         {
             connection = getConnection();
             statement = connection.createStatement();
-            String insertHero = String.format("INSERT INTO `swingy`.`heroes` (`name`, `type`, `level`, `exp`," +
-                                              " `atk`, `def`, `hp`) " +
-                                              " VALUES (%s, %s, %d, %d, %d, %d, %d);",
-                                                player.getName(),
-                                                player.getType(),
-                                                player.getLevel(),
-                                                player.getExp(),
-                                                player.getAtk(),
-                                                player.getDef(),
-                                                player.getHp()
-                                              );
-            statement.executeUpdate(insertHero);
+            String select  = String.format("SELECT * FROM `swingy`.`heroes` WHERE (`name` = '%s' AND `type` = '%s' AND " +
+                            "`level` = %d AND `exp` = %d AND `atk` = %d AND `def` = %d AND `hp` = %d) " ,
+                    player.getName(),
+                    player.getType(),
+                    player.getLevel(),
+                    player.getExp(),
+                    player.getAtk(),
+                    player.getDef(),
+                    player.getHp()
+            );
 
+            ResultSet results = statement.executeQuery(select);
+            exists = results.next();
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+        finally
+        {
+            closeDBConnection(connection, statement);
+        }
+        return (exists);
+    }
+
+    public void recordHero(Player player)
+    {
+        Connection connection = null;
+        Statement statement = null;
+        try
+        {
+            if (heroExists(player) == false)
+            {
+                connection = getConnection();
+                statement = connection.createStatement();
+                String insertHero = String.format("INSERT INTO `swingy`.`heroes` (`name`, `type`, `level`, `exp`," +
+                                " `atk`, `def`, `hp`) " +
+                                " VALUES ('%s', '%s', %d, %d, %d, %d, %d)",
+                        player.getName(),
+                        player.getType(),
+                        player.getLevel(),
+                        player.getExp(),
+                        player.getAtk(),
+                        player.getDef(),
+                        player.getHp()
+                );
+                statement.executeUpdate(insertHero);
+            }
         }
         catch (SQLException ex)
         {

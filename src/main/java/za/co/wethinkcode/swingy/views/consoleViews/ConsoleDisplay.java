@@ -11,10 +11,16 @@ public class ConsoleDisplay implements IDisplay
 {
     private GameController controller;
     private Scanner stdin;
+    private boolean switched = false;
     public ConsoleDisplay(GameController controller)
     {
         this.controller = controller;
         stdin = new Scanner(System.in);
+    }
+
+    public void setSwitched(boolean value)
+    {
+        switched = value;
     }
 
     public void clearScreen()
@@ -72,8 +78,8 @@ public class ConsoleDisplay implements IDisplay
                 index++;
                 String line = String.format("" +
                                 "" +
-                                "\t%d. Name: %s , Class: %s , Level: %d, ATK: %d, DEF: %d, HP: %d\n",
-                        index, player.getName(), player.getType(), player.getLevel(),player.getAtk(),
+                                "\t%d. Name: %s , Class: %s , Level: %d, Exp: %d, ATK: %d, DEF: %d, HP: %d\n\n",
+                        index, player.getName(), player.getType(), player.getLevel(), player.getExp(), player.getAtk(),
                         player.getDef(),player.getHp()
                         );
                 System.out.print(line);
@@ -424,7 +430,6 @@ public class ConsoleDisplay implements IDisplay
         while (!(input.equals("w") || input.equals("a") || input.equals("s") || input.equals("d") || input.equals("q") ||
                 input.equals("x") || input.equals("h")))
         {
-            //clearScreen();
             displayMap(controller.getMap());
             displayOptions();
             if (stdin.hasNext())
@@ -443,7 +448,7 @@ public class ConsoleDisplay implements IDisplay
 
     public void displayRenderGame()
     {
-        while (controller.isGameContinues())
+        while (controller.isGameContinues() && !switched)
             controller.displayStage();
     }
 }

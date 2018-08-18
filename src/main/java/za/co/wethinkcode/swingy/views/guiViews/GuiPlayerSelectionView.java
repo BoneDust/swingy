@@ -33,9 +33,11 @@ public class GuiPlayerSelectionView
     private ArrayList<String> getShortHeroDetails(ArrayList<Player> heroes)
     {
         ArrayList<String> details = new ArrayList<>();
+        int index = 0;
         for(Player player : heroes)
         {
-            String detail = player.getType() + " " + player.getName();
+            index++;
+            String detail = Integer.toString(index) + ". " + player.getType() + " " + player.getName();
             details.add(detail);
         }
         return (details);
@@ -100,8 +102,6 @@ public class GuiPlayerSelectionView
 
     private  void setColors()
     {
-        cbOptions.setBackground(Color.DARK_GRAY);
-        cbOptions.setForeground(Color.WHITE);
         info.setBackground(Color.DARK_GRAY);
         info.setForeground(Color.WHITE);
         lHeading.setForeground(Color.WHITE);
@@ -161,6 +161,5 @@ public class GuiPlayerSelectionView
         frame.setVisible(true);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
-
     }
 }
