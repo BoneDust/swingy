@@ -40,7 +40,8 @@ public class DBController
         try
         {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3308", "root", "password");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3308?useSSL=false", "root", "password");
+
         }
         catch (ClassNotFoundException ex)
         {
