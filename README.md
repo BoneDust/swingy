@@ -51,18 +51,24 @@ odds aren’t on his side, he must fight the villain.
 The battle between the hero and villain will be simulated and the outcome will be presented to the user.
 If a hero looses a battle, he dies and loses the mission.
 If a hero wins a battle, he gains:
-
  * Experience points, based on the villain power. Of course, he will level up if he
 reaches the next level experience.
  * An artifact, which he can keep or leave. Of course, winning a battle doesn’t guarantee that an artefact will be droped and the quality of the artefact also varies
 depending on the villain’s strength.
-Leveling up is based on the following formula * (level * 1000) + ((level − 1)^2) * 450*. So the
+
+Leveling up is based on the following formula *(level * 1000) + ((level − 1)^2) * 450*. So the
 necessary experience to level up will follow this pattern:
  * Level 1 - 1000 XP
  * Level 2 - 2450 XP
  * Level 3 - 4800 XP
  * Level 4 - 8050 XP
  * Level 5 - 12200 XP
+ 
+## Build and Launch
+
+Build the project running the command bellow in the root of your project folder.
+This needs to generate a runnable swingyt.jar file that can launch the game
+ 
 
 [build]: https://drive.google.com/uc?id=1VcSVBVmGNjo-J0ECZJm4V-b0Qop9qyDn  "maven build"
 [console_exec]: https://drive.google.com/uc?id=1VcSVBVmGNjo-J0ECZJm4V-b0Qop9qyDn  "console execution"
