@@ -1,6 +1,4 @@
 # Swingy
----
-wnWN.,/?
 
 ## Description
 
@@ -66,10 +64,25 @@ necessary experience to level up will follow this pattern:
  
 ## Build and Launch
 
-Build the project running the command bellow in the root of your project folder.
-This needs to generate a runnable swingyt.jar file that can launch the game
+1. Build the project by running the command below in the root of your project folder.
+This needs to generate a runnable swingy.jar file that can launch the game.
+
+&nbsp;&nbsp;&nbsp;![build] 
+
+2. Setup MySQL server on localhost port 3308 with user = *root* and password = *password*. 
+
+3. Launh the game. Remember that the game can be launched in two modes, console and gui.
+
+&nbsp;&nbsp;&nbsp;![console_exec]
+   
+&nbsp;&nbsp;&nbsp;![gui_exec]
+
+
+
+
+
  
 
-[build]: https://drive.google.com/uc?id=1VcSVBVmGNjo-J0ECZJm4V-b0Qop9qyDn  "maven build"
-[console_exec]: https://drive.google.com/uc?id=1VcSVBVmGNjo-J0ECZJm4V-b0Qop9qyDn  "console execution"
-[gui_exec]: https://drive.google.com/uc?id=18KQ93p_jhd-IP45Bi_RzmFMjwQiqpKH5  "gui execution"
+[build]: https://drive.google.com/uc?id=1VBKSTGajziRk8FeM93f1KAymwalJciGi  "maven build"
+[console_exec]: https://drive.google.com/uc?id=1Kr59H27O1zrbblIWZ_ObcJPmNNBETVPr  "console execution"
+[gui_exec]: https://drive.google.com/uc?id=1q-0Nw2cbLPSEClCey-mJYFrouCsuNIjz  "gui execution"
