@@ -77,6 +77,20 @@ This needs to generate a runnable swingy.jar file that can launch the game.
    
 &nbsp;&nbsp;&nbsp;![gui_exec]
 
+## Play
+
+* #### Start Menu
+&nbsp;&nbsp;![main]
+
+* #### Create New Player
+&nbsp;&nbsp;![create]
+
+* #### Select Saved Player
+&nbsp;&nbsp;![saved]
+
+* #### Play
+&nbsp;&nbsp;![play]
+
 
 
 
@@ -86,3 +100,9 @@ This needs to generate a runnable swingy.jar file that can launch the game.
 [build]: https://drive.google.com/uc?id=1VBKSTGajziRk8FeM93f1KAymwalJciGi  "maven build"
 [console_exec]: https://drive.google.com/uc?id=1Kr59H27O1zrbblIWZ_ObcJPmNNBETVPr  "console execution"
 [gui_exec]: https://drive.google.com/uc?id=1q-0Nw2cbLPSEClCey-mJYFrouCsuNIjz  "gui execution"
+[main]: https://drive.google.com/uc?id=1RBRZtyysRQegMQZIfCgKpV1xgZ2WJ2BQ  "start menu"
+[create]: https://drive.google.com/uc?id=1ZHmCmcqMeKXb2M1f8VN7vjZZg-a9QEyv  "create player"
+[saved]: https://drive.google.com/uc?id=1ct6n-TND_kS7y8BLJHHZYoGwbs3Ze4cw  "select saved player"
+[play]: https://drive.google.com/uc?id=1lCLCToi9NwbNBv421gAjxGetkkPUCS8F  "play"
+
+
